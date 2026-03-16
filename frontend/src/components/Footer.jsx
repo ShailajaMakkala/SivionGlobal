@@ -6,13 +6,13 @@ import Logo from './Logo';
 const Footer = () => {
   return (
     <footer className="relative bg-[#0B0F19] text-slate-300 pt-24 pb-8 border-t border-white/10 overflow-hidden">
-      
+
       {/* Background flare */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-[400px] bg-blue-600/10 blur-[100px] rounded-full pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 lg:gap-8 mb-16">
-          
+
           <div className="lg:pr-8">
             <Link to="/" className="inline-block mb-6 outline-none">
               <Logo />
@@ -59,25 +59,26 @@ const Footer = () => {
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 mt-0.5 shrink-0">
                   <MapPin className="w-4 h-4 text-blue-400" />
                 </div>
-                <span className="text-sm text-slate-400 font-light leading-relaxed">Silicon Valley Tower<br/>123 Tech Blvd, Suite 400<br/>San Francisco, CA 94025</span>
+                <span className="text-sm text-slate-400 font-light leading-relaxed">4th floor, Jaihind Enclave,<br></br> Plot number 45, near Blue dart courier, Cyber Hills Colony,
+                  VIP Hills, Silicon Valley, Madhapur, Hyderabad, Telangana 500081</span>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:border-sky-400/50 transition-colors">
-                   <Phone className="w-4 h-4 text-sky-400" />
+                  <Phone className="w-4 h-4 text-sky-400" />
                 </div>
-                <span className="text-sm font-medium text-slate-300">+1 (800) 555-0199</span>
+                <span className="text-sm font-medium text-slate-300">+91 8185990426</span>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:border-blue-400/50 transition-colors">
                   <Mail className="w-4 h-4 text-blue-400" />
                 </div>
-                <span className="text-sm font-medium text-slate-300">partners@sivion.com</span>
+                <span className="text-sm font-medium text-slate-300">Hr@sivionglobaltechnologies.com</span>
               </li>
             </ul>
           </div>
 
         </div>
-        
+
         <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center text-xs font-semibold tracking-wider text-slate-500 uppercase">
           <p>&copy; {new Date().getFullYear()} SiviOn Global Technologies. All rights reserved.</p>
           <div className="flex space-x-8 mt-4 md:mt-0">
