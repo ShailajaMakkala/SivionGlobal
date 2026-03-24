@@ -59,20 +59,19 @@ const Footer = () => {
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 mt-0.5 shrink-0">
                   <MapPin className="w-4 h-4 text-blue-400" />
                 </div>
-                <span className="text-sm text-slate-400 font-light leading-relaxed">4th floor, Jaihind Enclave,<br></br> Plot number 45, near Blue dart courier, Cyber Hills Colony,
-                  VIP Hills, Silicon Valley, Madhapur, Hyderabad, Telangana 500081</span>
+                <span className="text-sm text-slate-400 font-light leading-relaxed">Road No.7<br /> Kakatiya Hills, Madhapur<br />Hyderabad, Telangana - 500081</span>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:border-sky-400/50 transition-colors">
                   <Phone className="w-4 h-4 text-sky-400" />
                 </div>
-                <span className="text-sm font-medium text-slate-300">+91 8185990426</span>
+                <span className="text-sm font-medium text-slate-300">+91 9581136661<br /> +91 9581136662<br /> +91 8185990426</span>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:border-blue-400/50 transition-colors">
                   <Mail className="w-4 h-4 text-blue-400" />
                 </div>
-                <span className="text-sm font-medium text-slate-300">Hr@sivionglobaltechnologies.com</span>
+                <span className="text-sm font-medium text-slate-300">hr@sivionglobaltechnologies.com</span>
               </li>
             </ul>
           </div>

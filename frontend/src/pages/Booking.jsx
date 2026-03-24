@@ -138,7 +138,7 @@ const Booking = () => {
                                             <input
                                                 type="text" name="first_name" required value={formData.first_name} onChange={handleChange}
                                                 className="w-full bg-[#0A192F]/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all placeholder:text-slate-600"
-                                                placeholder="John"
+                                                placeholder="First Name"
                                             />
                                         </div>
                                         <div className="space-y-2">
@@ -146,7 +146,7 @@ const Booking = () => {
                                             <input
                                                 type="text" name="last_name" required value={formData.last_name} onChange={handleChange}
                                                 className="w-full bg-[#0A192F]/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all placeholder:text-slate-600"
-                                                placeholder="Doe"
+                                                placeholder="Last Name"
                                             />
                                         </div>
                                     </div>
@@ -156,7 +156,7 @@ const Booking = () => {
                                         <input
                                             type="email" name="email" required value={formData.email} onChange={handleChange}
                                             className="w-full bg-[#0A192F]/50 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500 transition-all placeholder:text-slate-600"
-                                            placeholder="john@company.com"
+                                            placeholder="example@company.com"
                                         />
                                     </div>
 
