@@ -15,7 +15,13 @@ const StaticPage = ({ title, content }) => {
 
       <section className="py-16 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="prose prose-slate prose-blue max-w-none">
-          {content || (
+          {content ? (
+            typeof content === 'string' ? (
+              <div dangerouslySetInnerHTML={{ __html: content }} />
+            ) : (
+              content
+            )
+          ) : (
             <p className="text-slate-600">This page is currently under development. Please check back later.</p>
           )}
           <div className="mt-8 pt-8 border-t border-slate-200">

@@ -84,7 +84,10 @@ const ServiceDetails = () => {
           
           <div className="lg:col-span-2">
             <h2 className="text-3xl font-bold text-white mb-6 font-heading">Service Overview</h2>
-            <p className="text-lg text-slate-400 font-light leading-relaxed mb-12">{service.overview}</p>
+            <div 
+              className="text-lg text-slate-400 font-light leading-relaxed mb-12"
+              dangerouslySetInnerHTML={{ __html: service.overview }}
+            />
 
             <div className="grid md:grid-cols-2 gap-10 mb-16">
               <div className="glass-panel p-8 rounded-3xl">

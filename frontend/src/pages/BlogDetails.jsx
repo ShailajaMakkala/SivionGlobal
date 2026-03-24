@@ -67,12 +67,10 @@ const BlogDetails = () => {
           )}
         </div>
 
-        <div className="prose prose-invert prose-lg max-w-none prose-a:text-sky-400 hover:prose-a:text-sky-300 prose-headings:font-heading prose-headings:font-bold prose-p:font-light prose-p:leading-relaxed prose-p:text-slate-300">
-           {/* In a real app, blog.content might be HTML or Markdown. We render as plain text for dummy data. */}
-           {blog.content.split('\n').map((paragraph, idx) => (
-             <p key={idx}>{paragraph}</p>
-           ))}
-        </div>
+        <div 
+          className="prose prose-invert prose-lg max-w-none prose-a:text-sky-400 hover:prose-a:text-sky-300 prose-headings:font-heading prose-headings:font-bold prose-p:font-light prose-p:leading-relaxed prose-p:text-slate-300"
+          dangerouslySetInnerHTML={{ __html: blog.content }}
+        />
 
         <div className="mt-16 pt-8 border-t border-white/10 flex justify-between items-center">
           <Link to="/blog" className="text-sky-400 font-semibold tracking-wider uppercase text-sm hover:text-white transition-colors flex items-center">

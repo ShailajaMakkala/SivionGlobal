@@ -78,9 +78,10 @@ const Blog = () => {
                   <h2 className="text-xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-sky-300 transition-all font-heading">
                     <Link to={`/blog/${blog.slug}`}>{blog.title}</Link>
                   </h2>
-                  <p className="text-slate-400 text-sm mb-6 flex-grow line-clamp-3 font-light leading-relaxed">
-                    {blog.excerpt || 'Read the full article to learn more about this topic and discover valuable insights for your digital strategy.'}
-                  </p>
+                  <div 
+                    className="text-slate-400 text-sm mb-6 flex-grow line-clamp-3 font-light leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: blog.excerpt || 'Read the full article to learn more about this topic and discover valuable insights for your digital strategy.' }}
+                  />
                   <Link to={`/blog/${blog.slug}`} className="text-sm font-semibold text-sky-400 hover:text-white transition-colors mt-auto inline-flex items-center uppercase tracking-wider">
                     Read Article <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
                   </Link>

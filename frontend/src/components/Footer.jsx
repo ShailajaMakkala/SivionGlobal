@@ -71,7 +71,7 @@ const Footer = () => {
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:border-blue-400/50 transition-colors">
                   <Mail className="w-4 h-4 text-blue-400" />
                 </div>
-                <span className="text-sm font-medium text-slate-300">hr@sivionglobaltechnologies.com</span>
+                <span className="text-sm font-medium text-slate-300">Hr@sivionglobaltechnologies.com</span>
               </li>
             </ul>
           </div>
