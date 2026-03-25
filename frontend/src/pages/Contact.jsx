@@ -58,7 +58,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-white text-lg">Phone Number</h4>
-                  <p className="text-slate-400 mt-1">+91 9581136661, +91 9581136662, +91 8185990426</p>
+                  <p className="text-slate-400 mt-1">+91 9581136661, +91 9581136662</p>
                 </div>
               </div>
               <div className="flex items-start">
