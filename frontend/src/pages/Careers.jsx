@@ -4,7 +4,8 @@ import apiClient from '../api/apiClient';
 import { Briefcase, MapPin, Send, Loader2 } from 'lucide-react';
 
 const Careers = () => {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '', position: '', resume_url: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', position: '' });
+  const [resumeFile, setResumeFile] = useState(null);
   const [status, setStatus] = useState({ type: '', message: '' });
   const [loading, setLoading] = useState(false);
   const [openPositions, setOpenPositions] = useState([]);
@@ -24,9 +25,22 @@ const Careers = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      await apiClient.post('/careers/apply', formData);
+      const data = new FormData();
+      data.append('name', formData.name);
+      data.append('email', formData.email);
+      data.append('phone', formData.phone);
+      data.append('position', formData.position);
+      if (resumeFile) data.append('resume', resumeFile);
+
+      await apiClient.post('/careers/apply', data, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
       setStatus({ type: 'success', message: 'Application submitted successfully. We will review it shortly!' });
-      setFormData({ name: '', email: '', phone: '', position: '', resume_url: '' });
+      setFormData({ name: '', email: '', phone: '', position: '' });
+      setResumeFile(null);
+      // Reset file input
+      const fileInput = document.getElementById('resume-upload');
+      if (fileInput) fileInput.value = '';
     } catch (error) {
       setStatus({ type: 'error', message: error.response?.data?.error || 'Failed to submit application.' });
     } finally {
@@ -145,9 +159,18 @@ const Careers = () => {
                 <input required type="tel" className="w-full bg-[#112240] text-white px-4 py-3 rounded-xl border border-white/10 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all" value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Resume Link (Google Drive, Dropbox, etc.) *</label>
-                <input required type="url" placeholder="https://..." className="w-full bg-[#112240] text-white px-4 py-3 rounded-xl border border-white/10 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all placeholder-slate-600" value={formData.resume_url} onChange={e => setFormData({...formData, resume_url: e.target.value})} />
-                <p className="text-xs text-sky-400/80 mt-2 font-light">Please ensure the link is publicly accessible.</p>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Upload Resume (PDF only) *</label>
+                <div className="relative">
+                  <input
+                    id="resume-upload"
+                    required
+                    type="file"
+                    accept=".pdf,application/pdf"
+                    className="w-full bg-[#112240] text-white px-4 py-3 rounded-xl border border-white/10 focus:ring-2 focus:ring-sky-500 focus:border-sky-500 outline-none transition-all file:mr-4 file:py-1 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:font-semibold file:cursor-pointer hover:file:bg-sky-500 cursor-pointer"
+                    onChange={e => setResumeFile(e.target.files[0])}
+                  />
+                </div>
+                <p className="text-xs text-sky-400/80 mt-2 font-light">Only PDF files are accepted. Max size: 5MB.</p>
               </div>
               
               <button type="submit" disabled={loading} className="w-full bg-blue-600 hover:bg-sky-500 text-white font-bold py-4 rounded-xl transition-colors shadow-[0_0_15px_rgba(59,130,246,0.5)] hover:shadow-[0_0_20px_rgba(0,216,255,0.6)] disabled:opacity-70 flex items-center justify-center mt-6 uppercase tracking-wider text-sm">
