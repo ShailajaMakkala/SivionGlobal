@@ -8,4 +8,14 @@ export default defineConfig({
     tailwindcss(),
     react(),
   ],
+  server: {
+    port: 5174,
+    proxy: {
+      '/api': {
+        target: 'https://sivionglobal.onrender.com',
+        changeOrigin: true,
+      },
+    },
+  },
 });
+

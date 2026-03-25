@@ -37,7 +37,8 @@ async function setup() {
 
     // 4. Default Admin Seeding
     console.log('Step 4: Checking for default admin...');
-    const adminEmail = 'admin@sivion.com';
+    const adminEmail = 'hr@sivionglobaltechnologies.com';
+
     const adminCheck = await pool.query('SELECT id FROM admins WHERE email = $1', [adminEmail]);
     
     if (adminCheck.rows.length === 0) {

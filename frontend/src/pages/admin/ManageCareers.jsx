@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import emailjs from '@emailjs/browser';
+
 import apiClient from '../../api/apiClient';
-import { 
-  BriefcaseBusiness, Trash2, Search, FileDown, Loader2, 
+import {
+  BriefcaseBusiness, Trash2, Search, FileDown, Loader2,
   Plus, Edit, ToggleLeft, ToggleRight, Briefcase, Users
 } from 'lucide-react';
 
@@ -201,6 +203,12 @@ const ApplicationsTab = () => {
       const response = await apiClient.patch(`/careers/${id}/status`, { status: newStatus }, authHeaders);
       if (response.data?.success) {
         setApplications(applications.map(a => a.id === id ? { ...a, status: newStatus } : a));
+
+        // Find the application details to send email
+        const app = applications.find(a => a.id === id);
+        if (app && (newStatus === 'selected' || newStatus === 'rejected')) {
+          sendEmailNotification(app, newStatus);
+        }
       }
     } catch (error) {
       console.error('Error updating status:', error);
@@ -208,16 +216,44 @@ const ApplicationsTab = () => {
     }
   };
 
+  const sendEmailNotification = (app, status) => {
+    const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID';
+    const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY';
+
+    // Choose template based on status
+    const templateId = status === 'selected'
+      ? (import.meta.env.VITE_EMAILJS_SELECTED_TEMPLATE_ID || 'template_g3wf66q')
+      : (import.meta.env.VITE_EMAILJS_REJECTED_TEMPLATE_ID || 'template_e55htyi');
+
+    const templateParams = {
+      to_name: app.name,
+      to_email: app.email,
+      from_name: 'SiviOn Global Technologies',
+      status: status === 'selected' ? 'Selected' : 'Rejected',
+      position: app.position,
+      message: status === 'selected'
+        ? 'Congratulations! You have been selected for the position. We will get in touch with you soon.'
+        : 'Thank you for your interest. Unfortunately, we have decided not to move forward with your application at this time.'
+    };
+
+    emailjs.send(serviceId, templateId, templateParams, publicKey)
+      .then((response) => {
+        console.log('Email sent successfully!', response.status, response.text);
+      }, (err) => {
+        console.error('Failed to send email:', err);
+      });
+  };
+
+
   const getStatusBadge = (status) => {
     const styles = {
       pending: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-      reviewed: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
-      interviewing: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-      hired: 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30',
+      selected: 'bg-emerald-600/20 text-emerald-300 border-emerald-500/30',
       rejected: 'bg-red-500/10 text-red-400 border-red-500/20',
     };
     return styles[status] || styles.pending;
   };
+
 
   const filtered = applications.filter(app =>
     app.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -275,10 +311,9 @@ const ApplicationsTab = () => {
                         className={`px-3 py-1 rounded-full text-xs font-bold border capitalize outline-none cursor-pointer transition-colors ${getStatusBadge(app.status)}`}
                       >
                         <option value="pending" className="bg-[#112240] text-amber-400 font-bold">Pending</option>
-                        <option value="reviewed" className="bg-[#112240] text-blue-400 font-bold">Reviewed</option>
-                        <option value="interviewing" className="bg-[#112240] text-emerald-400 font-bold">Interviewing</option>
-                        <option value="hired" className="bg-[#112240] text-emerald-300 font-bold">Hired</option>
+                        <option value="selected" className="bg-[#112240] text-emerald-300 font-bold">Selected</option>
                         <option value="rejected" className="bg-[#112240] text-red-400 font-bold">Rejected</option>
+
                       </select>
                     </td>
                     <td className="p-4 text-center">
@@ -327,11 +362,10 @@ const ManageCareers = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-2 px-5 py-3 font-semibold text-sm transition-all rounded-t-xl border-b-2 ${
-              activeTab === tab.id
+            className={`flex items-center gap-2 px-5 py-3 font-semibold text-sm transition-all rounded-t-xl border-b-2 ${activeTab === tab.id
                 ? 'border-sky-400 text-sky-400 bg-sky-400/5'
                 : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
-            }`}
+              }`}
           >
             {tab.icon}
             {tab.label}
