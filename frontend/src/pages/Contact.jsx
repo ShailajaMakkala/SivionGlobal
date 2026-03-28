@@ -49,7 +49,7 @@ const Contact = () => {
                 </div>
                 <div>
                   <h4 className="font-semibold text-white text-lg">Office Address</h4>
-                  <p className="text-slate-400 mt-1">Road No.7, Kakatiya Hills, Madhapur<br />Hyderabad, Telangana - 500081</p>
+                  <p className="text-slate-400 mt-1">3d Floor, Advant Towers, Plot No 4<br /> Rd No 7, Kakatiya Hills, Madhapur<br />Hyderabad, Telangana-500081</p>
                 </div>
               </div>
               <div className="flex items-start">

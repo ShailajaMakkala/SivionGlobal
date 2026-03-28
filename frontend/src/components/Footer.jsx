@@ -21,8 +21,13 @@ const Footer = () => {
               Architecting the future through precision engineering, cutting-edge technology, and data-driven digital strategies. Elevate your corporate presence today.
             </p>
             <div className="flex space-x-4">
-              {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-400/50 transition-all hover:shadow-[0_0_15px_rgba(0,216,255,0.3)]">
+              {[
+                { Icon: Facebook, url: "https://www.facebook.com/share/1KwngJLX9b/?mibextid=wwXIfr" },
+                { Icon: Twitter, url: "https://x.com/sivionglobal?s=21" },
+                { Icon: Linkedin, url: "https://www.linkedin.com/company/sivionglobaltechnologies/" },
+                { Icon: Instagram, url: "https://www.instagram.com/sivionglobaltechnologies?igsh=MWEzaHJnbndjdmo3dQ%3D%3D&utm_source=qr" }
+              ].map(({ Icon, url }, i) => (
+                <a key={i} href={url} target="_blank" rel="noopener noreferrer" className="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-slate-400 hover:text-sky-400 hover:border-sky-400/50 transition-all hover:shadow-[0_0_15px_rgba(0,216,255,0.3)]">
                   <Icon className="w-4 h-4" />
                 </a>
               ))}
@@ -59,7 +64,7 @@ const Footer = () => {
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 mt-0.5 shrink-0">
                   <MapPin className="w-4 h-4 text-blue-400" />
                 </div>
-                <span className="text-sm text-slate-400 font-light leading-relaxed">Road No.7<br /> Kakatiya Hills, Madhapur<br />Hyderabad, Telangana - 500081</span>
+                <span className="text-sm text-slate-400 font-light leading-relaxed">3d Floor, Advant Towers, Plot No 4<br /> Rd No 7, Kakatiya Hills, Madhapur<br /> Hyderabad, Telangana-500081</span>
               </li>
               <li className="flex items-center group">
                 <div className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mr-3 shrink-0 group-hover:border-sky-400/50 transition-colors">
@@ -86,7 +91,7 @@ const Footer = () => {
           </div>
         </div>
       </div>
-    </footer>
+    </footer >
   );
 };
 
