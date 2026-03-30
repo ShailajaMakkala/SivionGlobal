@@ -81,9 +81,9 @@ const Contact = () => {
               </div>
             </div>
 
-            {/* Google Maps placeholder */}
-            <div className="mt-10 h-64 bg-slate-200 rounded-xl flex items-center justify-center overflow-hidden border border-slate-300">
-              <span className="text-slate-500 font-medium">Google Maps Embed</span>
+            {/* Google Maps Embed */}
+            <div className="mt-10 h-64 rounded-xl overflow-hidden border border-slate-300">
+              <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1903.17974408291!2d78.3968744!3d17.4424998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x23e41b79ea8ac1c1%3A0x8a26da85874bf594!2ssivion%20global%20technologies!5e0!3m2!1sen!2sin!4v1774852045097!5m2!1sen!2sin" width="100%" height="100%" style={{border: '0'}} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
             </div>
           </div>
 
