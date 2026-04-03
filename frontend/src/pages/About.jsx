@@ -45,7 +45,7 @@ const About = () => {
             <h2 className="text-sm font-bold tracking-widest text-sky-500 uppercase mb-4">Our Origin</h2>
             <h3 className="text-4xl font-black text-white mb-6 font-heading leading-tight">Born from a desire to engineer perfection.</h3>
             <p className="text-slate-400 text-lg leading-relaxed mb-6 font-light">
-              Founded in 2020, SiviOn Global Technologies started with a simple premise: enterprise software doesn't have to be slow, bloated, or ugly.
+              Founded in 2018, SiviOn Global Technologies started with a simple premise: enterprise software doesn't have to be slow, bloated, or ugly.
             </p>
             <p className="text-slate-400 text-lg leading-relaxed mb-8 font-light">
               Today, we partner with industry leaders and disruptive startups to architect platforms that scale globally, load instantly, and command attention.
