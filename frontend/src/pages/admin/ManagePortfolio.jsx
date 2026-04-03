@@ -148,11 +148,11 @@ const ManagePortfolio = () => {
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image URL (Full View)</label>
-                <input type="url" value={currentProject.image_url || ''} onChange={e => setCurrentProject({...currentProject, image_url: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="https://..." />
+                <input type="text" value={currentProject.image_url || ''} onChange={e => setCurrentProject({...currentProject, image_url: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="e.g., /clinicappointment.png or https://..." />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Card Background Image URL</label>
-                <input type="url" value={currentProject.card_bg || ''} onChange={e => setCurrentProject({...currentProject, card_bg: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="https://..." />
+                <input type="text" value={currentProject.card_bg || ''} onChange={e => setCurrentProject({...currentProject, card_bg: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="e.g., /clinicappointment.png or https://..." />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-300 mb-2">Tech Stack (Comma Separated)</label>
