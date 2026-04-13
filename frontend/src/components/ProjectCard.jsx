@@ -70,7 +70,7 @@ const ProjectCard = ({ project, index }) => {
       </div>
     </motion.div>
 
-      {/* Image Modal Lightbox */}
+      {/* Project Detail Modal */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
@@ -86,16 +86,44 @@ const ProjectCard = ({ project, index }) => {
             >
               <X className="w-6 h-6" />
             </button>
-            <motion.img
-              initial={{ scale: 0.9, opacity: 0 }}
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              src={project.image || project.card_bg}
-              alt={project.title}
-              className="max-w-[90vw] max-h-[90vh] object-contain rounded-xl shadow-2xl border border-white/10"
+              exit={{ scale: 0.95, opacity: 0 }}
+              transition={{ type: 'spring', damping: 25, stiffness: 300 }}
+              className="relative max-w-[92vw] w-full max-h-[90vh] overflow-y-auto rounded-3xl shadow-2xl border border-white/10 bg-slate-950/95 p-6 backdrop-blur-xl"
               onClick={(e) => e.stopPropagation()}
-            />
+            >
+              {project.image && (
+                <motion.img
+                  initial={{ opacity: 0, scale: 0.98 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.98 }}
+                  transition={{ duration: 0.3 }}
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full max-h-[45vh] object-contain rounded-3xl mb-6"
+                />
+              )}
+              <div className="space-y-5 text-white">
+                <div>
+                  <h2 className="text-3xl md:text-4xl font-bold mb-3">{project.title}</h2>
+                  <span className="inline-flex items-center rounded-full bg-blue-500/10 text-blue-200 text-xs uppercase tracking-[0.2em] px-4 py-2 border border-blue-500/20">
+                    {project.category}
+                  </span>
+                </div>
+                <div className="text-slate-300 leading-relaxed text-sm md:text-base" dangerouslySetInnerHTML={{ __html: project.description }} />
+                {project.technologies && (
+                  <div className="flex flex-wrap gap-3 pt-3 border-t border-white/10 mt-4">
+                    {(typeof project.technologies === 'string' ? project.technologies.split(',') : project.technologies).map((tech, i) => (
+                      <span key={i} className="px-3 py-1 bg-white/5 text-sky-100 text-[11px] uppercase tracking-wider font-semibold rounded-full border border-white/10">
+                        {tech.trim ? tech.trim() : tech}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>
