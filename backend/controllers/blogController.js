@@ -1,5 +1,6 @@
 const Blog = require('../models/blogModel');
 const path = require('path');
+const { uploadFileToCloudinary } = require('../config/cloudinary');
 
 const toRelativeUploadPath = (filePath) => {
   const uploadsDir = path.join(__dirname, '..');
@@ -36,11 +37,29 @@ exports.createBlog = async (req, res) => {
 
     if (req.files) {
       if (req.files.image && req.files.image.length > 0) {
-        image = toRelativeUploadPath(req.files.image[0].path);
-        file_type = req.files.image[0].mimetype;
+        const file = req.files.image[0];
+        image = toRelativeUploadPath(file.path);
+        file_type = file.mimetype;
+
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+          try {
+            await uploadFileToCloudinary(file.path, image);
+          } catch (cloudErr) {
+            console.error('Failed to upload image to Cloudinary:', cloudErr);
+          }
+        }
       }
       if (req.files.card_bg && req.files.card_bg.length > 0) {
-        card_bg = toRelativeUploadPath(req.files.card_bg[0].path);
+        const file = req.files.card_bg[0];
+        card_bg = toRelativeUploadPath(file.path);
+
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+          try {
+            await uploadFileToCloudinary(file.path, card_bg);
+          } catch (cloudErr) {
+            console.error('Failed to upload card_bg to Cloudinary:', cloudErr);
+          }
+        }
       }
     }
 
@@ -60,10 +79,28 @@ exports.updateBlog = async (req, res) => {
 
     if (req.files) {
       if (req.files.image && req.files.image.length > 0) {
-        image = toRelativeUploadPath(req.files.image[0].path);
+        const file = req.files.image[0];
+        image = toRelativeUploadPath(file.path);
+
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+          try {
+            await uploadFileToCloudinary(file.path, image);
+          } catch (cloudErr) {
+            console.error('Failed to upload image to Cloudinary:', cloudErr);
+          }
+        }
       }
       if (req.files.card_bg && req.files.card_bg.length > 0) {
-        card_bg = toRelativeUploadPath(req.files.card_bg[0].path);
+        const file = req.files.card_bg[0];
+        card_bg = toRelativeUploadPath(file.path);
+
+        if (process.env.CLOUDINARY_CLOUD_NAME) {
+          try {
+            await uploadFileToCloudinary(file.path, card_bg);
+          } catch (cloudErr) {
+            console.error('Failed to upload card_bg to Cloudinary:', cloudErr);
+          }
+        }
       }
     }
 
