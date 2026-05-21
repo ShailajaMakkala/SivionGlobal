@@ -32,16 +32,24 @@ app.use(cors({
   credentials: true,
 }));
 
-// Helmet (security headers) – disable CSP for local dev to avoid blocking issues
-app.use(helmet({ contentSecurityPolicy: false }));
+// Helmet (security headers) – disable CSP and allow cross-origin resources for local dev
+app.use(helmet({ 
+  contentSecurityPolicy: false,
+  crossOriginResourcePolicy: { policy: "cross-origin" }
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+
+const path = require('path');
 
 // Basic route for testing
 app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'SiviOn Global Technologies API is running' });
 });
+
+// Serve static files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Import Routes
 const contactRoutes = require('./routes/contactRoutes');

@@ -12,7 +12,11 @@ export default defineConfig({
     port: 5174,
     proxy: {
       '/api': {
-        target: 'https://sivionglobal.onrender.com',
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+      },
+      '/uploads': {
+        target: 'http://localhost:5000',
         changeOrigin: true,
       },
     },

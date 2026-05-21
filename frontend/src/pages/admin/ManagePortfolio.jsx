@@ -9,7 +9,7 @@ const ManagePortfolio = () => {
   
   // Form State
   const [isEditing, setIsEditing] = useState(false);
-  const [currentProject, setCurrentProject] = useState({ id: null, title: '', category: '', client: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' });
+  const [currentProject, setCurrentProject] = useState({ id: null, title: '', category: '', client: '', live_url: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' });
 
   const fetchProjects = async () => {
     try {
@@ -41,44 +41,55 @@ const ManagePortfolio = () => {
     }
   };
 
-  const handleTechStackChange = (e) => {
-    const tsArray = e.target.value.split(',').map(item => item.trim());
-    setCurrentProject({ ...currentProject, tech_stack: tsArray });
+  // Added file change handler
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+    setCurrentProject(prev => ({ ...prev, [field]: file }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Map frontend 'tech_stack' array to backend 'technologies' string
-      const payload = {
-        ...currentProject,
-        image: currentProject.image_url, // Ensure field mapping
-        technologies: Array.isArray(currentProject.tech_stack) 
-          ? currentProject.tech_stack.join(', ') 
-          : currentProject.tech_stack
-      };
+      const formData = new FormData();
+      formData.append('title', currentProject.title);
+      formData.append('category', currentProject.category);
+      formData.append('client', currentProject.client || '');
+      formData.append('live_url', currentProject.live_url || '');
+      formData.append('description', currentProject.description || '');
+      // tech stack -> technologies string
+      const techString = Array.isArray(currentProject.tech_stack)
+        ? currentProject.tech_stack.join(', ')
+        : currentProject.tech_stack;
+      formData.append('technologies', techString);
+      if (currentProject.image_url instanceof File) {
+        formData.append('image', currentProject.image_url);
+      }
+      if (currentProject.card_bg instanceof File) {
+        formData.append('card_bg', currentProject.card_bg);
+      }
 
       if (currentProject.id) {
-        const response = await apiClient.put(`/portfolio/${currentProject.id}`, payload, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('sivion_admin_token')}` }
-        });
+        const response = await apiClient.put(`/portfolio/${currentProject.id}`, formData);
         if (response.data.success) {
           setProjects(projects.map(p => p.id === currentProject.id ? response.data.data : p));
         }
       } else {
-        const response = await apiClient.post('/portfolio', payload, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('sivion_admin_token')}` }
-        });
+        const response = await apiClient.post('/portfolio', formData);
         if (response.data.success) {
           setProjects([response.data.data, ...projects]);
         }
       }
       setIsEditing(false);
-      setCurrentProject({ id: null, title: '', category: '', client: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' });
+      setCurrentProject({ id: null, title: '', category: '', client: '', live_url: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' });
     } catch (error) {
-       console.error('Save error:', error);
-       alert('Error saving project.');
+      console.error('Save error:', error);
+      alert('Error saving project.');
     }
+  };
+
+  const handleTechStackChange = (e) => {
+    const tsArray = e.target.value.split(',').map(item => item.trim());
+    setCurrentProject({ ...currentProject, tech_stack: tsArray });
   };
 
   const handleEdit = (project) => {
@@ -119,7 +130,7 @@ const ManagePortfolio = () => {
             />
           </div>
           <button 
-            onClick={() => { setIsEditing(true); setCurrentProject({ id: null, title: '', category: '', client: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' }); }}
+            onClick={() => { setIsEditing(true); setCurrentProject({ id: null, title: '', category: '', client: '', live_url: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' }); }}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] whitespace-nowrap"
           >
             <Plus size={18} /> New Project
@@ -147,12 +158,16 @@ const ManagePortfolio = () => {
                 <input type="text" value={currentProject.client || ''} onChange={e => setCurrentProject({...currentProject, client: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image URL (Full View)</label>
-                <input type="text" value={currentProject.image_url || ''} onChange={e => setCurrentProject({...currentProject, image_url: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="e.g., /clinicappointment.png or https://..." />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Live URL</label>
+                <input type="text" value={currentProject.live_url || ''} onChange={e => setCurrentProject({...currentProject, live_url: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="https://..." />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Card Background Image URL</label>
-                <input type="text" value={currentProject.card_bg || ''} onChange={e => setCurrentProject({...currentProject, card_bg: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="e.g., /clinicappointment.png or https://..." />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image (Full View)</label>
+                <input type="file" onChange={e => handleFileChange(e, 'image_url')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Card Background Image</label>
+                <input type="file" onChange={e => handleFileChange(e, 'card_bg')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-300 mb-2">Tech Stack (Comma Separated)</label>

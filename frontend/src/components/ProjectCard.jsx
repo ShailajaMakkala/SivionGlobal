@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink, X } from 'lucide-react';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const ProjectCard = ({ project, index }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,7 +19,7 @@ const ProjectCard = ({ project, index }) => {
         {project.card_bg || project.image ? (
           <div className="w-full h-full relative">
             <img
-              src={project.card_bg || project.image}
+              src={getImageUrl(project.card_bg || project.image)}
               alt={project.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out saturate-[0.8] group-hover:saturate-100"
             />
@@ -67,6 +68,13 @@ const ProjectCard = ({ project, index }) => {
             </span>
           ))}
         </div>
+        {project.live_url && (
+          <div className="mt-5 pt-4 border-t border-white/10">
+            <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 text-sm font-semibold transition-colors z-20 relative">
+              Visit Website <ExternalLink className="w-4 h-4" />
+            </a>
+          </div>
+        )}
       </div>
     </motion.div>
 
@@ -100,7 +108,7 @@ const ProjectCard = ({ project, index }) => {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.98 }}
                   transition={{ duration: 0.3 }}
-                  src={project.image}
+                  src={getImageUrl(project.image)}
                   alt={project.title}
                   className="w-full max-h-[45vh] object-contain rounded-3xl mb-6"
                 />
@@ -108,9 +116,17 @@ const ProjectCard = ({ project, index }) => {
               <div className="space-y-5 text-white">
                 <div>
                   <h2 className="text-3xl md:text-4xl font-bold mb-3">{project.title}</h2>
-                  <span className="inline-flex items-center rounded-full bg-blue-500/10 text-blue-200 text-xs uppercase tracking-[0.2em] px-4 py-2 border border-blue-500/20">
-                    {project.category}
-                  </span>
+                  <div className="flex items-center flex-wrap gap-4">
+                    <span className="inline-flex items-center rounded-full bg-blue-500/10 text-blue-200 text-xs uppercase tracking-[0.2em] px-4 py-2 border border-blue-500/20">
+                      {project.category}
+                    </span>
+                    {project.live_url && (
+                      <a href={project.live_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-sky-400 hover:text-sky-300 transition-colors text-sm font-semibold">
+                        <ExternalLink className="w-4 h-4" />
+                        Live Website
+                      </a>
+                    )}
+                  </div>
                 </div>
                 <div className="text-slate-300 leading-relaxed text-sm md:text-base" dangerouslySetInnerHTML={{ __html: project.description }} />
                 {project.technologies && (

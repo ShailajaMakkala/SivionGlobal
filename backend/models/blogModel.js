@@ -1,13 +1,13 @@
 const db = require('../config/db');
 
 class Blog {
-  static async create({ title, slug, content, image, card_bg, author }) {
+  static async create({ title, slug, content, image, card_bg, author, file_type }) {
     const query = `
-      INSERT INTO blogs (title, slug, content, image, card_bg, author)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO blogs (title, slug, content, image, card_bg, author, file_type)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *;
     `;
-    const values = [title, slug, content, image, card_bg, author];
+    const values = [title, slug, content, image, card_bg, author, file_type];
     const { rows } = await db.query(query, values);
     return rows[0];
   }

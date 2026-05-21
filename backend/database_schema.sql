@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS portfolio_projects (
     card_bg VARCHAR(255),
     technologies VARCHAR(255), /* Comma-separated or JSON string */
     category VARCHAR(100),
+    file_type VARCHAR(50),
+    live_url VARCHAR(255),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

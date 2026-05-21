@@ -6,7 +6,7 @@ const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
-  
+
   // Form State
   const [isEditing, setIsEditing] = useState(false);
   const [currentBlog, setCurrentBlog] = useState({ id: null, title: '', slug: '', content: '', author: '', image_url: '', card_bg: '', meta_description: '' });
@@ -44,19 +44,26 @@ const ManageBlogs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      const formData = new FormData();
+      formData.append('title', currentBlog.title);
+      formData.append('slug', currentBlog.slug);
+      formData.append('content', currentBlog.content);
+      formData.append('author', currentBlog.author);
+      formData.append('meta_description', currentBlog.meta_description);
+      if (currentBlog.image_url instanceof File) {
+        formData.append('image_url', currentBlog.image_url);
+      }
+      if (currentBlog.card_bg instanceof File) {
+        formData.append('card_bg', currentBlog.card_bg);
+      }
+
       if (currentBlog.id) {
-        // Update
-        const response = await apiClient.put(`/blogs/${currentBlog.id}`, currentBlog, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('sivion_admin_token')}` }
-        });
+        const response = await apiClient.put(`/blogs/${currentBlog.id}`, formData);
         if (response.data.success) {
           setBlogs(blogs.map(b => b.id === currentBlog.id ? response.data.data : b));
         }
       } else {
-        // Create
-        const response = await apiClient.post('/blogs', currentBlog, {
-          headers: { Authorization: `Bearer ${localStorage.getItem('sivion_admin_token')}` }
-        });
+        const response = await apiClient.post('/blogs', formData);
         if (response.data.success) {
           setBlogs([response.data.data, ...blogs]);
         }
@@ -73,7 +80,7 @@ const ManageBlogs = () => {
     setIsEditing(true);
   };
 
-  const filteredBlogs = blogs.filter(blog => 
+  const filteredBlogs = blogs.filter(blog =>
     blog.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -84,7 +91,7 @@ const ManageBlogs = () => {
           <h1 className="text-3xl font-black text-white font-heading mb-2">Manage Blogs</h1>
           <p className="text-slate-400 font-light">Create, edit, and publish content for your audience. Note: Content supports raw HTML.</p>
         </div>
-        
+
         <div className="flex items-center gap-4 w-full md:w-auto">
           <div className="relative flex-1 md:w-64">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -98,7 +105,7 @@ const ManageBlogs = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button 
+          <button
             onClick={() => { setIsEditing(true); setCurrentBlog({ id: null, title: '', slug: '', content: '', author: '', image_url: '', card_bg: '', meta_description: '' }); }}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] whitespace-nowrap"
           >
@@ -116,34 +123,34 @@ const ManageBlogs = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Title</label>
-                <input required type="text" value={currentBlog.title} onChange={e => setCurrentBlog({...currentBlog, title: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                <input required type="text" value={currentBlog.title} onChange={e => setCurrentBlog({ ...currentBlog, title: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Slug (URL Path)</label>
-                <input required type="text" value={currentBlog.slug} onChange={e => setCurrentBlog({...currentBlog, slug: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm" placeholder="e.g. new-tech-trends" />
+                <input required type="text" value={currentBlog.slug} onChange={e => setCurrentBlog({ ...currentBlog, slug: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm" placeholder="e.g. new-tech-trends" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Author</label>
-                <input type="text" value={currentBlog.author || ''} onChange={e => setCurrentBlog({...currentBlog, author: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                <input type="text" value={currentBlog.author || ''} onChange={e => setCurrentBlog({ ...currentBlog, author: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image URL (Full Article)</label>
-                <input type="url" value={currentBlog.image_url || ''} onChange={e => setCurrentBlog({...currentBlog, image_url: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="https://..." />
+                <input type="file" onChange={(e) => handleFileChange(e, 'image_url')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Card Background Image URL</label>
-                <input type="url" value={currentBlog.card_bg || ''} onChange={e => setCurrentBlog({...currentBlog, card_bg: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="https://..." />
+                <input type="file" onChange={(e) => handleFileChange(e, 'card_bg')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-300 mb-2">Meta Description (SEO)</label>
-                <input type="text" value={currentBlog.meta_description || ''} onChange={e => setCurrentBlog({...currentBlog, meta_description: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                <input type="text" value={currentBlog.meta_description || ''} onChange={e => setCurrentBlog({ ...currentBlog, meta_description: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-300 mb-2">Content (HTML Supported)</label>
-                <textarea required rows="10" value={currentBlog.content} onChange={e => setCurrentBlog({...currentBlog, content: e.target.value})} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm" placeholder="<p>Write your amazing blog details here...</p>" />
+                <textarea required rows="10" value={currentBlog.content} onChange={e => setCurrentBlog({ ...currentBlog, content: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm" placeholder="<p>Write your amazing blog details here...</p>" />
               </div>
             </div>
-            
+
             <div className="flex justify-end gap-4 pt-4 border-t border-white/10">
               <button type="button" onClick={() => setIsEditing(false)} className="px-6 py-3 rounded-xl text-slate-300 hover:bg-white/5 transition-colors">Cancel</button>
               <button type="submit" className="bg-sky-500 hover:bg-sky-400 text-white px-6 py-3 rounded-xl font-bold transition-colors shadow-lg shadow-sky-500/20">Save Post</button>

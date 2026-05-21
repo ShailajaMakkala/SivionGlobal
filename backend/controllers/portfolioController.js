@@ -1,4 +1,12 @@
 const Portfolio = require('../models/portfolioModel');
+const path = require('path');
+
+// Convert absolute multer path to relative /uploads/... path
+const toRelativeUploadPath = (filePath) => {
+  const uploadsDir = path.join(__dirname, '..');
+  const relative = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
+  return '/' + relative;
+};
 
 exports.getPortfolio = async (req, res) => {
   try {
@@ -11,19 +19,49 @@ exports.getPortfolio = async (req, res) => {
 
 exports.createProject = async (req, res) => {
   try {
-    const newProject = await Portfolio.create(req.body);
+    const { title, description, technologies, category, client, live_url } = req.body;
+    let image = req.body.image;
+    let card_bg = req.body.card_bg;
+    let file_type = undefined;
+
+    if (req.files) {
+      if (req.files.image && req.files.image.length > 0) {
+        image = toRelativeUploadPath(req.files.image[0].path);
+        file_type = req.files.image[0].mimetype;
+      }
+      if (req.files.card_bg && req.files.card_bg.length > 0) {
+        card_bg = toRelativeUploadPath(req.files.card_bg[0].path);
+      }
+    }
+    
+    const newProject = await Portfolio.create({ title, description, image, card_bg, technologies, category, client, file_type, live_url });
     res.status(201).json({ success: true, data: newProject });
   } catch (error) {
+    console.error('Error creating project:', error);
     res.status(500).json({ error: 'Server error while creating project' });
   }
 };
 
 exports.updateProject = async (req, res) => {
   try {
-    const updated = await Portfolio.update(req.params.id, req.body);
+    const { title, description, technologies, category, client, live_url } = req.body;
+    let image = req.body.image;
+    let card_bg = req.body.card_bg;
+
+    if (req.files) {
+      if (req.files.image && req.files.image.length > 0) {
+        image = toRelativeUploadPath(req.files.image[0].path);
+      }
+      if (req.files.card_bg && req.files.card_bg.length > 0) {
+        card_bg = toRelativeUploadPath(req.files.card_bg[0].path);
+      }
+    }
+
+    const updated = await Portfolio.update(req.params.id, { title, description, image, card_bg, technologies, category, client, live_url });
     if (!updated) return res.status(404).json({ error: 'Project not found' });
     res.status(200).json({ success: true, data: updated });
   } catch (error) {
+    console.error('Error updating project:', error);
     res.status(500).json({ error: 'Server error while updating project' });
   }
 };
@@ -37,3 +75,4 @@ exports.deleteProject = async (req, res) => {
     res.status(500).json({ error: 'Server error while deleting project' });
   }
 };
+
