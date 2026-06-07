@@ -32,11 +32,9 @@ exports.createProject = async (req, res) => {
         file_type = file.mimetype;
 
         if (process.env.CLOUDINARY_CLOUD_NAME) {
-          try {
-            await uploadFileToCloudinary(file.path, image);
-          } catch (cloudErr) {
-            console.error('Failed to upload image to Cloudinary:', cloudErr);
-          }
+          uploadFileToCloudinary(file.path, image).catch((cloudErr) => {
+            console.error('Failed to upload image to Cloudinary in background:', cloudErr);
+          });
         }
       }
       if (req.files.card_bg && req.files.card_bg.length > 0) {
@@ -44,11 +42,9 @@ exports.createProject = async (req, res) => {
         card_bg = toRelativeUploadPath(file.path);
 
         if (process.env.CLOUDINARY_CLOUD_NAME) {
-          try {
-            await uploadFileToCloudinary(file.path, card_bg);
-          } catch (cloudErr) {
-            console.error('Failed to upload card_bg to Cloudinary:', cloudErr);
-          }
+          uploadFileToCloudinary(file.path, card_bg).catch((cloudErr) => {
+            console.error('Failed to upload card_bg to Cloudinary in background:', cloudErr);
+          });
         }
       }
     }
@@ -73,11 +69,9 @@ exports.updateProject = async (req, res) => {
         image = toRelativeUploadPath(file.path);
 
         if (process.env.CLOUDINARY_CLOUD_NAME) {
-          try {
-            await uploadFileToCloudinary(file.path, image);
-          } catch (cloudErr) {
-            console.error('Failed to upload image to Cloudinary:', cloudErr);
-          }
+          uploadFileToCloudinary(file.path, image).catch((cloudErr) => {
+            console.error('Failed to upload image to Cloudinary in background:', cloudErr);
+          });
         }
       }
       if (req.files.card_bg && req.files.card_bg.length > 0) {
@@ -85,11 +79,9 @@ exports.updateProject = async (req, res) => {
         card_bg = toRelativeUploadPath(file.path);
 
         if (process.env.CLOUDINARY_CLOUD_NAME) {
-          try {
-            await uploadFileToCloudinary(file.path, card_bg);
-          } catch (cloudErr) {
-            console.error('Failed to upload card_bg to Cloudinary:', cloudErr);
-          }
+          uploadFileToCloudinary(file.path, card_bg).catch((cloudErr) => {
+            console.error('Failed to upload card_bg to Cloudinary in background:', cloudErr);
+          });
         }
       }
     }

@@ -41,6 +41,11 @@ const ManageBlogs = () => {
     }
   };
 
+  const handleFileChange = (e, field) => {
+    const file = e.target.files[0];
+    setCurrentBlog(prev => ({ ...prev, [field]: file }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -50,10 +55,16 @@ const ManageBlogs = () => {
       formData.append('content', currentBlog.content);
       formData.append('author', currentBlog.author);
       formData.append('meta_description', currentBlog.meta_description);
+      
       if (currentBlog.image_url instanceof File) {
-        formData.append('image_url', currentBlog.image_url);
+        formData.append('image', currentBlog.image_url);
+      } else if (typeof currentBlog.image_url === 'string') {
+        formData.append('image', currentBlog.image_url);
       }
+      
       if (currentBlog.card_bg instanceof File) {
+        formData.append('card_bg', currentBlog.card_bg);
+      } else if (typeof currentBlog.card_bg === 'string') {
         formData.append('card_bg', currentBlog.card_bg);
       }
 
@@ -71,12 +82,17 @@ const ManageBlogs = () => {
       setIsEditing(false);
       setCurrentBlog({ id: null, title: '', slug: '', content: '', author: '', image_url: '', card_bg: '', meta_description: '' });
     } catch (error) {
-      alert('Error saving blog post. Make sure the slug is unique.');
+      console.error('Save error:', error);
+      const errMsg = error.response?.data?.error || error.message || 'Unknown error';
+      alert(`Error saving blog post: ${errMsg}`);
     }
   };
 
   const handleEdit = (blog) => {
-    setCurrentBlog(blog);
+    setCurrentBlog({
+      ...blog,
+      image_url: blog.image
+    });
     setIsEditing(true);
   };
 

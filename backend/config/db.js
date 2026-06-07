@@ -5,7 +5,8 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
-  }
+  },
+  connectionTimeoutMillis: 10000 // Timeout after 10 seconds instead of hanging infinitely
 });
 
 pool.on('connect', () => {

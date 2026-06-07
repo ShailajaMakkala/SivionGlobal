@@ -61,10 +61,16 @@ const ManagePortfolio = () => {
         ? currentProject.tech_stack.join(', ')
         : currentProject.tech_stack;
       formData.append('technologies', techString);
+      
       if (currentProject.image_url instanceof File) {
         formData.append('image', currentProject.image_url);
+      } else if (typeof currentProject.image_url === 'string') {
+        formData.append('image', currentProject.image_url);
       }
+      
       if (currentProject.card_bg instanceof File) {
+        formData.append('card_bg', currentProject.card_bg);
+      } else if (typeof currentProject.card_bg === 'string') {
         formData.append('card_bg', currentProject.card_bg);
       }
 
@@ -83,7 +89,8 @@ const ManagePortfolio = () => {
       setCurrentProject({ id: null, title: '', category: '', client: '', live_url: '', image_url: '', card_bg: '', completion_date: '', tech_stack: [], description: '' });
     } catch (error) {
       console.error('Save error:', error);
-      alert('Error saving project.');
+      const errMsg = error.response?.data?.error || error.message || 'Unknown error';
+      alert(`Error saving project: ${errMsg}`);
     }
   };
 
