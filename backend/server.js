@@ -4,7 +4,7 @@ const helmet = require('helmet');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5005;
 
 // CORS Configuration
 const allowedOrigins = [
