@@ -1,51 +1,79 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { Code, Smartphone, Megaphone, TrendingUp, Monitor, Server } from 'lucide-react';
+import { Code, Smartphone, Megaphone, TrendingUp, Monitor, Server, Bot, Workflow, MessageCircle, BarChart3, Wrench, Cloud, Palette } from 'lucide-react';
 import ServiceCard from '../components/ServiceCard';
 
 const Services = () => {
   const servicesList = [
     {
-      title: 'Java Full Stack Development',
-      description: 'End-to-end development of robust enterprise applications using Spring Boot, Hibernate, and modern front-end frameworks.',
-      icon: Server,
-      linkTo: '/services/java-fullstack',
+      title: 'AI-Driven Solutions',
+      description: 'Smart AI solutions that automate tasks, improve productivity, and help businesses make faster, data-driven decisions.',
+      icon: Bot,
+      linkTo: '/services/ai-solutions',
       bgImage: '/service_bg_java_1773640831559.png'
     },
     {
-      title: 'Web Application Development',
-      description: 'Custom, scalable, and secure web applications built to handle complex business logic and high traffic.',
-      icon: Code,
-      linkTo: '/services/web-application',
-      bgImage: '/service_bg_web_1773640813931.png'
+      title: 'N8N Workflow Automation',
+      description: 'Connect your tools, automate repetitive processes, and streamline business operations without manual effort.',
+      icon: Workflow,
+      linkTo: '/services/n8n-automation',
+      bgImage: '/service_bg_java_1773640831559.png'
     },
     {
-      title: 'Website Design & Development',
-      description: 'Beautiful, responsive, and highly performant corporate websites that capture your brand identity.',
-      icon: Monitor,
-      linkTo: '/services/web-development',
-      bgImage: '/service_bg_web_1773640813931.png'
-    },
-    {
-      title: 'Digital Marketing',
-      description: 'Comprehensive digital marketing strategies, including Google Ads and social media, to maximize ROI.',
-      icon: Megaphone,
-      linkTo: '/services/digital-marketing',
+      title: 'WABA (WhatsApp Business API)',
+      description: 'Engage customers, capture leads, provide support, and automate conversations through WhatsApp.',
+      icon: MessageCircle,
+      linkTo: '/services/waba',
       bgImage: '/service_bg_marketing_1773640894132.png'
     },
     {
-      title: 'SEO Services',
-      description: 'Advanced on-page, off-page, and technical SEO to dominate search engine rankings.',
+      title: 'SEO (Search Engine Optimization)',
+      description: 'Improve your online visibility and rank higher on search engines to attract more potential customers.',
       icon: TrendingUp,
       linkTo: '/services/seo',
       bgImage: '/service_bg_marketing_1773640894132.png'
     },
     {
-      title: 'Website Maintenance',
-      description: 'Ongoing support, security updates, and performance optimization to keep your platform running smoothly.',
-      icon: Smartphone, // Placeholder icon
-      linkTo: '/contact#contact-info',
+      title: 'Strategy Planning',
+      description: 'Develop technology and growth strategies that align with your business goals and long-term vision.',
+      icon: BarChart3,
+      linkTo: '/services/strategy-planning',
       bgImage: '/service_bg_java_1773640831559.png'
+    },
+    {
+      title: 'Web & App Development',
+      description: 'Build scalable websites, web applications, and mobile apps tailored to your business requirements.',
+      icon: Code,
+      linkTo: '/services/web-application',
+      bgImage: '/service_bg_web_1773640813931.png'
+    },
+    {
+      title: 'Application Maintenance & Support',
+      description: 'Keep your applications secure, updated, optimized, and running smoothly with continuous support.',
+      icon: Wrench,
+      linkTo: '/services/app-maintenance',
+      bgImage: '/service_bg_java_1773640831559.png'
+    },
+    {
+      title: 'Digital Marketing',
+      description: 'Reach the right audience, generate quality leads, and grow your brand through targeted digital campaigns.',
+      icon: Megaphone,
+      linkTo: '/services/digital-marketing',
+      bgImage: '/service_bg_marketing_1773640894132.png'
+    },
+    {
+      title: 'Cloud Migration',
+      description: 'Move your business to the cloud for improved scalability, security, performance, and operational efficiency.',
+      icon: Cloud,
+      linkTo: '/services/cloud-migration',
+      bgImage: '/service_bg_web_1773640813931.png'
+    },
+    {
+      title: 'UI/UX Design',
+      description: 'Create intuitive, user-friendly, and engaging digital experiences that enhance customer satisfaction and adoption.',
+      icon: Palette,
+      linkTo: '/services/uiux-design',
+      bgImage: '/service_bg_web_1773640813931.png'
     }
   ];
 

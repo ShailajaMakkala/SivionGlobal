@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import Hero from '../components/Hero';
 import ServiceCard from '../components/ServiceCard';
 import ProjectCard from '../components/ProjectCard';
-import { Code, Smartphone, Megaphone, TrendingUp, Cpu, ShieldCheck, Globe, Zap, ArrowRight, CheckCircle } from 'lucide-react';
+import { Code, Smartphone, Megaphone, TrendingUp, Cpu, ShieldCheck, Globe, Zap, ArrowRight, CheckCircle, Bot, Workflow } from 'lucide-react';
 import { motion } from 'framer-motion';
 import apiClient from '../api/apiClient';
 
@@ -30,31 +30,31 @@ const Home = () => {
 
   const services = [
     {
-      title: 'Web Application Development',
-      description: 'Scalable, secure, and blazing-fast web applications built on modern JavaScript and Node.js ecosystems.',
-      icon: Code,
-      linkTo: '/services/web-development',
-      bgImage: '/service_bg_web_1773640813931.png'
-    },
-    {
-      title: 'Enterprise Java Solutions',
-      description: 'Mission-critical backend architectures and APIs utilizing Spring Boot and PostgreSQL for unmatched reliability.',
-      icon: Cpu,
-      linkTo: '/services/java-fullstack',
+      title: 'AI-Driven Solutions',
+      description: 'Smart AI solutions that automate tasks, improve productivity, and help businesses make faster, data-driven decisions.',
+      icon: Bot,
+      linkTo: '/services/ai-solutions',
       bgImage: '/service_bg_java_1773640831559.png'
     },
     {
-      title: 'Digital Marketing Mastery',
-      description: 'Precision-targeted marketing campaigns that convert clicks into long-term enterprise clients.',
-      icon: Megaphone,
-      linkTo: '/services/digital-marketing',
-      bgImage: '/service_bg_marketing_1773640894132.png'
+      title: 'N8N Workflow Automation',
+      description: 'Connect your tools, automate repetitive processes, and streamline business operations without manual effort.',
+      icon: Workflow,
+      linkTo: '/services/n8n-automation',
+      bgImage: '/service_bg_java_1773640831559.png'
     },
     {
-      title: 'SEO Dominance',
-      description: 'Technical SEO and content strategies engineered to conquer search engine algorithms.',
-      icon: TrendingUp,
-      linkTo: '/services/seo',
+      title: 'Web & App Development',
+      description: 'Build scalable websites, web applications, and mobile apps tailored to your business requirements.',
+      icon: Code,
+      linkTo: '/services/web-application',
+      bgImage: '/service_bg_web_1773640813931.png'
+    },
+    {
+      title: 'Digital Marketing',
+      description: 'Reach the right audience, generate quality leads, and grow your brand through targeted digital campaigns.',
+      icon: Megaphone,
+      linkTo: '/services/digital-marketing',
       bgImage: '/service_bg_marketing_1773640894132.png'
     }
   ];
