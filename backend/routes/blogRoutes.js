@@ -9,7 +9,7 @@ router.get('/', blogController.getBlogs);
 router.get('/:slug', blogController.getBlogBySlug);
 
 // Admin routes (Protected)
-const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }, { name: 'card_bg', maxCount: 1 }]);
+const cpUpload = upload.fields([{ name: 'image', maxCount: 1 }]);
 router.post('/', authMiddleware, cpUpload, blogController.createBlog);
 router.put('/:id', authMiddleware, cpUpload, blogController.updateBlog);
 router.delete('/:id', authMiddleware, blogController.deleteBlog);

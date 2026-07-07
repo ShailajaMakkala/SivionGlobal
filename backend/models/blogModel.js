@@ -1,13 +1,13 @@
 const db = require('../config/db');
 
 class Blog {
-  static async create({ title, slug, content, image, card_bg, author, file_type }) {
+  static async create({ title, slug, content, image, category, focus_keywords, meta_description, file_type }) {
     const query = `
-      INSERT INTO blogs (title, slug, content, image, card_bg, author, file_type)
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      INSERT INTO blogs (title, slug, content, image, category, focus_keywords, meta_description, file_type)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
     `;
-    const values = [title, slug, content, image, card_bg, author, file_type];
+    const values = [title, slug, content, image, category, focus_keywords, meta_description, file_type];
     const { rows } = await db.query(query, values);
     return rows[0];
   }
@@ -24,14 +24,14 @@ class Blog {
     return rows[0];
   }
 
-  static async update(id, { title, slug, content, image, card_bg, author }) {
+  static async update(id, { title, slug, content, image, category, focus_keywords, meta_description }) {
     const query = `
       UPDATE blogs 
-      SET title = $1, slug = $2, content = $3, image = $4, card_bg = $5, author = $6 
-      WHERE id = $7
+      SET title = $1, slug = $2, content = $3, image = $4, category = $5, focus_keywords = $6, meta_description = $7 
+      WHERE id = $8
       RETURNING *;
     `;
-    const values = [title, slug, content, image, card_bg, author, id];
+    const values = [title, slug, content, image, category, focus_keywords, meta_description, id];
     const { rows } = await db.query(query, values);
     return rows[0];
   }

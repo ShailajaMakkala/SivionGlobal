@@ -30,9 +30,9 @@ exports.getBlogBySlug = async (req, res) => {
 
 exports.createBlog = async (req, res) => {
   try {
-    const { title, slug, content, author } = req.body;
+    const { title, content, category, focus_keywords, meta_description } = req.body;
+    let slug = (req.body.slug || '').trim().replace(/^\/+/, '');
     let image = req.body.image;
-    let card_bg = req.body.card_bg;
     let file_type = undefined;
 
     if (req.files) {
@@ -47,19 +47,9 @@ exports.createBlog = async (req, res) => {
           });
         }
       }
-      if (req.files.card_bg && req.files.card_bg.length > 0) {
-        const file = req.files.card_bg[0];
-        card_bg = toRelativeUploadPath(file.path);
-
-        if (process.env.CLOUDINARY_CLOUD_NAME) {
-          uploadFileToCloudinary(file.path, card_bg).catch((cloudErr) => {
-            console.error('Failed to upload card_bg to Cloudinary in background:', cloudErr);
-          });
-        }
-      }
     }
 
-    const newBlog = await Blog.create({ title, slug, content, image, card_bg, author, file_type });
+    const newBlog = await Blog.create({ title, slug, content, image, category, focus_keywords, meta_description, file_type });
     res.status(201).json({ success: true, data: newBlog });
   } catch (error) {
     console.error('Error creating blog:', error);
@@ -69,9 +59,9 @@ exports.createBlog = async (req, res) => {
 
 exports.updateBlog = async (req, res) => {
   try {
-    const { title, slug, content, author } = req.body;
+    const { title, content, category, focus_keywords, meta_description } = req.body;
+    let slug = (req.body.slug || '').trim().replace(/^\/+/, '');
     let image = req.body.image;
-    let card_bg = req.body.card_bg;
 
     if (req.files) {
       if (req.files.image && req.files.image.length > 0) {
@@ -84,19 +74,9 @@ exports.updateBlog = async (req, res) => {
           });
         }
       }
-      if (req.files.card_bg && req.files.card_bg.length > 0) {
-        const file = req.files.card_bg[0];
-        card_bg = toRelativeUploadPath(file.path);
-
-        if (process.env.CLOUDINARY_CLOUD_NAME) {
-          uploadFileToCloudinary(file.path, card_bg).catch((cloudErr) => {
-            console.error('Failed to upload card_bg to Cloudinary in background:', cloudErr);
-          });
-        }
-      }
     }
 
-    const updated = await Blog.update(req.params.id, { title, slug, content, image, card_bg, author });
+    const updated = await Blog.update(req.params.id, { title, slug, content, image, category, focus_keywords, meta_description });
     if (!updated) return res.status(404).json({ error: 'Blog not found' });
     res.status(200).json({ success: true, data: updated });
   } catch (error) {

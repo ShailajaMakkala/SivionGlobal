@@ -7,11 +7,10 @@ const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fallback data
   const fallbackBlogs = [
-    { id: 1, title: 'Top 5 Digital Marketing Trends in 2024', slug: 'digital-marketing-trends-2024', author: 'Marketing Team', created_at: '2024-01-15T00:00:00.000Z', excerpt: 'Discover the latest strategies and tools to supercharge your digital presence this year.' },
-    { id: 2, title: 'Why Your Business Needs a Custom Web App', slug: 'why-custom-web-apps', author: 'Tech Lead', created_at: '2024-02-10T00:00:00.000Z', excerpt: 'Learn how custom web applications provide better security, scalability, and ROI compared to off-the-shelf solutions.' },
-    { id: 3, title: 'Mastering SEO: A Beginner\'s Guide', slug: 'mastering-seo-guide', author: 'SEO Expert', created_at: '2024-03-05T00:00:00.000Z', excerpt: 'A comprehensive guide to understanding search engine optimization and improving your online visibility.' },
+    { id: 1, title: 'Top 5 Digital Marketing Trends in 2024', slug: 'digital-marketing-trends-2024', created_at: '2024-01-15T00:00:00.000Z', excerpt: 'Discover the latest strategies and tools to supercharge your digital presence this year.' },
+    { id: 2, title: 'Why Your Business Needs a Custom Web App', slug: 'why-custom-web-apps', created_at: '2024-02-10T00:00:00.000Z', excerpt: 'Learn how custom web applications provide better security, scalability, and ROI compared to off-the-shelf solutions.' },
+    { id: 3, title: 'Mastering SEO: A Beginner\'s Guide', slug: 'mastering-seo-guide', created_at: '2024-03-05T00:00:00.000Z', excerpt: 'A comprehensive guide to understanding search engine optimization and improving your online visibility.' },
   ];
 
   useEffect(() => {
@@ -35,6 +34,14 @@ const Blog = () => {
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const generateExcerpt = (content) => {
+    if (!content) return 'Read the full article to learn more about this topic and discover valuable insights for your digital strategy.';
+    const stripped = content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+    const words = stripped.split(' ');
+    if (words.length <= 100) return stripped;
+    return words.slice(0, 100).join(' ') + '...';
   };
 
   return (
@@ -64,8 +71,8 @@ const Blog = () => {
             {blogs.map((blog) => (
               <article key={blog.id} className="glass-panel rounded-3xl overflow-hidden hover:border-sky-500/50 transition-all border border-white/10 flex flex-col h-full group">
                 <div className="h-48 bg-[#112240] flex items-center justify-center p-6 text-center relative overflow-hidden border-b border-white/10">
-                  {blog.card_bg ? (
-                    <img src={blog.card_bg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700" />
+                  {blog.image ? (
+                    <img src={blog.image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700" />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-sky-400/20 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                   )}
@@ -73,15 +80,14 @@ const Blog = () => {
                 </div>
                 <div className="p-8 flex flex-col flex-grow relative bg-white/[0.02]">
                   <div className="text-xs font-bold text-sky-400 mb-3 uppercase tracking-widest">
-                    {formatDate(blog.created_at)} <span className="mx-2 text-white/20">|</span> {blog.author}
+                    {formatDate(blog.created_at)}
                   </div>
                   <h2 className="text-xl font-bold text-white mb-4 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-blue-400 group-hover:to-sky-300 transition-all font-heading">
                     <Link to={`/blog/${blog.slug}`}>{blog.title}</Link>
                   </h2>
-                  <div 
-                    className="text-slate-400 text-sm mb-6 flex-grow line-clamp-3 font-light leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: blog.excerpt || 'Read the full article to learn more about this topic and discover valuable insights for your digital strategy.' }}
-                  />
+                  <p className="text-slate-400 text-sm mb-6 flex-grow line-clamp-3 font-light leading-relaxed">
+                    {blog.excerpt || generateExcerpt(blog.content)}
+                  </p>
                   <Link to={`/blog/${blog.slug}`} className="text-sm font-semibold text-sky-400 hover:text-white transition-colors mt-auto inline-flex items-center uppercase tracking-wider">
                     Read Article <span className="ml-2 group-hover:translate-x-1 transition-transform">&rarr;</span>
                   </Link>

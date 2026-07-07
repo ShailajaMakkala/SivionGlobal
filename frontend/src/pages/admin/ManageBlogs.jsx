@@ -9,7 +9,7 @@ const ManageBlogs = () => {
 
   // Form State
   const [isEditing, setIsEditing] = useState(false);
-  const [currentBlog, setCurrentBlog] = useState({ id: null, title: '', slug: '', content: '', author: '', image_url: '', card_bg: '', meta_description: '' });
+  const [currentBlog, setCurrentBlog] = useState({ id: null, title: '', slug: '', content: '', image_url: '', meta_description: '', category: '', focus_keywords: '' });
 
   const fetchBlogs = async () => {
     try {
@@ -53,19 +53,14 @@ const ManageBlogs = () => {
       formData.append('title', currentBlog.title);
       formData.append('slug', currentBlog.slug);
       formData.append('content', currentBlog.content);
-      formData.append('author', currentBlog.author);
+      formData.append('category', currentBlog.category);
+      formData.append('focus_keywords', currentBlog.focus_keywords);
       formData.append('meta_description', currentBlog.meta_description);
-      
+
       if (currentBlog.image_url instanceof File) {
         formData.append('image', currentBlog.image_url);
       } else if (typeof currentBlog.image_url === 'string') {
         formData.append('image', currentBlog.image_url);
-      }
-      
-      if (currentBlog.card_bg instanceof File) {
-        formData.append('card_bg', currentBlog.card_bg);
-      } else if (typeof currentBlog.card_bg === 'string') {
-        formData.append('card_bg', currentBlog.card_bg);
       }
 
       if (currentBlog.id) {
@@ -80,7 +75,7 @@ const ManageBlogs = () => {
         }
       }
       setIsEditing(false);
-      setCurrentBlog({ id: null, title: '', slug: '', content: '', author: '', image_url: '', card_bg: '', meta_description: '' });
+      setCurrentBlog({ id: null, title: '', slug: '', content: '', image_url: '', meta_description: '', category: '', focus_keywords: '' });
     } catch (error) {
       console.error('Save error:', error);
       const errMsg = error.response?.data?.error || error.message || 'Unknown error';
@@ -122,7 +117,7 @@ const ManageBlogs = () => {
             />
           </div>
           <button
-            onClick={() => { setIsEditing(true); setCurrentBlog({ id: null, title: '', slug: '', content: '', author: '', image_url: '', card_bg: '', meta_description: '' }); }}
+            onClick={() => { setIsEditing(true); setCurrentBlog({ id: null, title: '', slug: '', content: '', image_url: '', meta_description: '', category: '', focus_keywords: '' }); }}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl font-bold transition-all shadow-[0_0_15px_rgba(59,130,246,0.3)] whitespace-nowrap"
           >
             <Plus size={18} /> New Post
@@ -146,20 +141,21 @@ const ManageBlogs = () => {
                 <input required type="text" value={currentBlog.slug} onChange={e => setCurrentBlog({ ...currentBlog, slug: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm" placeholder="e.g. new-tech-trends" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Author</label>
-                <input type="text" value={currentBlog.author || ''} onChange={e => setCurrentBlog({ ...currentBlog, author: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
-              </div>
-              <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image URL (Full Article)</label>
                 <input type="file" onChange={(e) => handleFileChange(e, 'image_url')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
               </div>
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Card Background Image URL</label>
-                <input type="file" onChange={(e) => handleFileChange(e, 'card_bg')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Category</label>
+                <input type="text" value={currentBlog.category || ''} onChange={e => setCurrentBlog({ ...currentBlog, category: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="e.g. Technology, Design" />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Focus Keywords</label>
+                <input type="text" value={currentBlog.focus_keywords || ''} onChange={e => setCurrentBlog({ ...currentBlog, focus_keywords: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="e.g. web development, seo" />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-slate-300 mb-2">Meta Description (SEO)</label>
-                <input type="text" value={currentBlog.meta_description || ''} onChange={e => setCurrentBlog({ ...currentBlog, meta_description: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                <label className="block text-sm font-medium text-slate-300 mb-2">Meta Description (SEO - 150-160 chars)</label>
+                <input type="text" maxLength={160} value={currentBlog.meta_description || ''} onChange={e => setCurrentBlog({ ...currentBlog, meta_description: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" placeholder="A brief description of the blog post for search engines..." />
+                <p className="text-xs text-slate-500 mt-1">{(currentBlog.meta_description || '').length} / 160 characters</p>
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-300 mb-2">Content (HTML Supported)</label>
@@ -191,7 +187,6 @@ const ManageBlogs = () => {
                   <tr className="bg-[#112240] border-b border-white/10">
                     <th className="p-4 text-xs font-semibold text-slate-300 uppercase">Status</th>
                     <th className="p-4 text-xs font-semibold text-slate-300 uppercase">Title & Slug</th>
-                    <th className="p-4 text-xs font-semibold text-slate-300 uppercase">Author</th>
                     <th className="p-4 text-xs font-semibold text-slate-300 uppercase">Date</th>
                     <th className="p-4 text-xs font-semibold text-slate-300 uppercase text-right">Actions</th>
                   </tr>
@@ -206,7 +201,6 @@ const ManageBlogs = () => {
                         <p className="text-sm font-bold text-white mb-0.5">{blog.title}</p>
                         <p className="text-xs text-sky-400 font-mono">/{blog.slug}</p>
                       </td>
-                      <td className="p-4 text-sm text-slate-400">{blog.author || 'System'}</td>
                       <td className="p-4 text-sm text-slate-400">
                         {new Date(blog.created_at).toLocaleDateString()}
                       </td>
