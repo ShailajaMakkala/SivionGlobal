@@ -1,7 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
+const db = require('./config/db');
+
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -76,6 +78,22 @@ app.use((err, req, res, next) => {
   res.status(500).json({ error: 'Something went wrong!' });
 });
 
-app.listen(PORT, () => {
+const server = app.listen(PORT);
+
+server.on('listening', () => {
   console.log(`Server is running on port ${PORT}`);
+  
+  // Test Database Connection
+  db.query('SELECT NOW()')
+    .then(() => {
+      console.log('Database connection verified successfully.');
+    })
+    .catch((err) => {
+      console.error('Database connection failed on startup:', err);
+    });
 });
+
+server.on('error', (err) => {
+  console.error(`Server failed to start on port ${PORT}:`, err.message);
+});
+

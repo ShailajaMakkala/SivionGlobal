@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/adminModel');
-require('dotenv').config();
 
 const authMiddleware = async (req, res, next) => {
   try {
