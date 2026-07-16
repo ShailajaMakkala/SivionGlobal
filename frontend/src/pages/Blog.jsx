@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Link } from 'react-router-dom';
 import apiClient from '../api/apiClient';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
@@ -72,7 +73,7 @@ const Blog = () => {
               <article key={blog.id} className="glass-panel rounded-3xl overflow-hidden hover:border-sky-500/50 transition-all border border-white/10 flex flex-col h-full group">
                 <div className="h-48 bg-[#112240] flex items-center justify-center p-6 text-center relative overflow-hidden border-b border-white/10">
                   {blog.image ? (
-                    <img src={blog.image} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700" />
+                    <img src={getImageUrl(blog.image)} alt="" className="absolute inset-0 w-full h-full object-cover opacity-30 group-hover:opacity-60 group-hover:scale-105 transition-all duration-700" />
                   ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-600/20 to-sky-400/20 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                   )}

@@ -143,6 +143,17 @@ const ManageBlogs = () => {
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image URL (Full Article)</label>
                 <input type="file" onChange={(e) => handleFileChange(e, 'image_url')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                {currentBlog.image && typeof currentBlog.image === 'string' && (
+                  <div className="mt-3 p-3 bg-white/5 rounded-lg border border-white/10 flex items-center gap-4">
+                    <img src={currentBlog.image.startsWith('http') ? currentBlog.image : currentBlog.image} alt="Preview" className="w-16 h-16 object-cover rounded-md border border-white/20" />
+                    <div className="flex-1 overflow-hidden">
+                      <p className="text-xs text-slate-400 mb-1">Current Image Path:</p>
+                      <a href={currentBlog.image.startsWith('http') ? currentBlog.image : currentBlog.image} target="_blank" rel="noreferrer" className="text-sm text-sky-400 hover:underline truncate block">
+                        {currentBlog.image}
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Category</label>

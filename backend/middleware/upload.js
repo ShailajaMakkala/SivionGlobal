@@ -1,11 +1,17 @@
 const multer = require('multer');
 const path = require('path');
 
+const fs = require('fs');
+
 // Set storage destination and filename
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    // ensure uploads/portfolio exists
-    cb(null, path.join(__dirname, '..', 'uploads', 'portfolio'));
+    // ensure uploads/portfolio exists in frontend/public
+    const uploadDir = path.join(__dirname, '..', '..', 'frontend', 'public', 'uploads', 'portfolio');
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);

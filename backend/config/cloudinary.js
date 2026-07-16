@@ -41,7 +41,8 @@ const uploadFileToCloudinary = (localFilePath, relativePath) => {
         resource_type: 'auto'
       },
       (error, result) => {
-        // Only delete the local temporary file in production to preserve it for local development serving
+        // Do not delete local file so it is permanently served from frontend/public
+        /*
         try {
           if (process.env.NODE_ENV === 'production' && fs.existsSync(localFilePath)) {
             fs.unlinkSync(localFilePath);
@@ -49,6 +50,7 @@ const uploadFileToCloudinary = (localFilePath, relativePath) => {
         } catch (unlinkError) {
           console.error('Error deleting local temp file:', unlinkError);
         }
+        */
 
         if (error) {
           console.error('Cloudinary upload error:', error);

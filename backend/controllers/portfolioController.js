@@ -4,7 +4,7 @@ const { uploadFileToCloudinary } = require('../config/cloudinary');
 
 // Convert absolute multer path to relative /uploads/... path
 const toRelativeUploadPath = (filePath) => {
-  const uploadsDir = path.join(__dirname, '..');
+  const uploadsDir = path.join(__dirname, '..', '..', 'frontend', 'public');
   const relative = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
   return '/' + relative;
 };

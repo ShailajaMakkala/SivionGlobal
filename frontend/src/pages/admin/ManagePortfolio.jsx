@@ -171,10 +171,32 @@ const ManagePortfolio = () => {
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image (Full View)</label>
                 <input type="file" onChange={e => handleFileChange(e, 'image_url')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                {currentProject.image_url && typeof currentProject.image_url === 'string' && (
+                  <div className="mt-3 p-3 bg-white/5 rounded-lg border border-white/10 flex items-center gap-4">
+                    <img src={currentProject.image_url.startsWith('http') ? currentProject.image_url : currentProject.image_url} alt="Preview" className="w-16 h-16 object-cover rounded-md border border-white/20" />
+                    <div className="flex-1 overflow-hidden">
+                      <p className="text-xs text-slate-400 mb-1">Current Image Path:</p>
+                      <a href={currentProject.image_url.startsWith('http') ? currentProject.image_url : currentProject.image_url} target="_blank" rel="noreferrer" className="text-sm text-sky-400 hover:underline truncate block">
+                        {currentProject.image_url}
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Card Background Image</label>
                 <input type="file" onChange={e => handleFileChange(e, 'card_bg')} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                {currentProject.card_bg && typeof currentProject.card_bg === 'string' && (
+                  <div className="mt-3 p-3 bg-white/5 rounded-lg border border-white/10 flex items-center gap-4">
+                    <img src={currentProject.card_bg.startsWith('http') ? currentProject.card_bg : currentProject.card_bg} alt="Preview" className="w-16 h-16 object-cover rounded-md border border-white/20" />
+                    <div className="flex-1 overflow-hidden">
+                      <p className="text-xs text-slate-400 mb-1">Current Card BG Path:</p>
+                      <a href={currentProject.card_bg.startsWith('http') ? currentProject.card_bg : currentProject.card_bg} target="_blank" rel="noreferrer" className="text-sm text-sky-400 hover:underline truncate block">
+                        {currentProject.card_bg}
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-300 mb-2">Tech Stack (Comma Separated)</label>

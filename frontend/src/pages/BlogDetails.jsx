@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useParams, Link } from 'react-router-dom';
 import apiClient from '../api/apiClient';
+import { getImageUrl } from '../utils/getImageUrl';
 
 const BlogDetails = () => {
   const { slug } = useParams();
@@ -59,7 +60,7 @@ const BlogDetails = () => {
 
           {blog.image ? (
             <div className="w-full aspect-video rounded-3xl shadow-2xl mb-12 border border-white/10 overflow-hidden">
-              <img src={blog.image} alt={blog.title} className="w-full h-full object-cover" />
+              <img src={getImageUrl(blog.image)} alt={blog.title} className="w-full h-full object-cover" />
             </div>
           ) : (
             <div className="w-full aspect-video bg-[#112240] rounded-3xl mb-12 flex items-center justify-center border border-white/10 relative overflow-hidden">

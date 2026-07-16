@@ -3,7 +3,7 @@ const path = require('path');
 const { uploadFileToCloudinary } = require('../config/cloudinary');
 
 const toRelativeUploadPath = (filePath) => {
-  const uploadsDir = path.join(__dirname, '..');
+  const uploadsDir = path.join(__dirname, '..', '..', 'frontend', 'public');
   const relative = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
   return '/' + relative;
 };
@@ -42,9 +42,12 @@ exports.createBlog = async (req, res) => {
         file_type = file.mimetype;
 
         if (process.env.CLOUDINARY_CLOUD_NAME) {
-          uploadFileToCloudinary(file.path, image).catch((cloudErr) => {
-            console.error('Failed to upload image to Cloudinary in background:', cloudErr);
-          });
+          try {
+            const result = await uploadFileToCloudinary(file.path, image);
+            image = result.secure_url;
+          } catch (cloudErr) {
+            console.error('Failed to upload image to Cloudinary:', cloudErr);
+          }
         }
       }
     }
@@ -69,9 +72,12 @@ exports.updateBlog = async (req, res) => {
         image = toRelativeUploadPath(file.path);
 
         if (process.env.CLOUDINARY_CLOUD_NAME) {
-          uploadFileToCloudinary(file.path, image).catch((cloudErr) => {
-            console.error('Failed to upload image to Cloudinary in background:', cloudErr);
-          });
+          try {
+            const result = await uploadFileToCloudinary(file.path, image);
+            image = result.secure_url;
+          } catch (cloudErr) {
+            console.error('Failed to upload image to Cloudinary:', cloudErr);
+          }
         }
       }
     }

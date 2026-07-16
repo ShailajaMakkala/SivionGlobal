@@ -15,14 +15,6 @@ export const getImageUrl = (imagePath) => {
     return cleanPath;
   }
 
-  // In production (Vercel), resolve against Cloudinary if VITE_CLOUDINARY_CLOUD_NAME is configured,
-  // otherwise resolve against the configured VITE_API_URL.
-  const cloudinaryCloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
-  if (cloudinaryCloudName) {
-    return `https://res.cloudinary.com/${cloudinaryCloudName}/image/upload${cleanPath}`;
-  }
-
-  const apiBaseUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-  const baseUrl = apiBaseUrl.replace('/api', '');
-  return baseUrl + cleanPath;
+  // Just return the path, the frontend's static server will handle it natively
+  return cleanPath;
 };

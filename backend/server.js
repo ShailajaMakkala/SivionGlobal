@@ -48,8 +48,8 @@ app.get('/api/health', (req, res) => {
   res.status(200).json({ status: 'ok', message: 'SiviOn Global Technologies API is running' });
 });
 
-// Serve static files from the uploads directory
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// Serve static files from the frontend public directory
+app.use('/uploads', express.static(path.join(__dirname, '..', 'frontend', 'public', 'uploads')));
 
 // Import Routes
 const contactRoutes = require('./routes/contactRoutes');
