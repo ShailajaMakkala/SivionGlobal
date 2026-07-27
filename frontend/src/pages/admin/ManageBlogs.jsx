@@ -61,17 +61,24 @@ const ManageBlogs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Always ensure a valid slug — fall back to title if slug is empty
+      const finalSlug = normalizeSlug(currentBlog.slug || currentBlog.title || '');
+      if (!finalSlug) {
+        alert('Please provide a title or slug for the blog post.');
+        return;
+      }
+
       const formData = new FormData();
       formData.append('title', currentBlog.title);
-      formData.append('slug', currentBlog.slug);
+      formData.append('slug', finalSlug);  // Always send a clean normalized slug
       formData.append('content', currentBlog.content);
-      formData.append('category', currentBlog.category);
-      formData.append('focus_keywords', currentBlog.focus_keywords);
-      formData.append('meta_description', currentBlog.meta_description);
+      formData.append('category', currentBlog.category || '');
+      formData.append('focus_keywords', currentBlog.focus_keywords || '');
+      formData.append('meta_description', currentBlog.meta_description || '');
 
       if (currentBlog.image_url instanceof File) {
         formData.append('image', currentBlog.image_url);
-      } else if (typeof currentBlog.image_url === 'string') {
+      } else if (typeof currentBlog.image_url === 'string' && currentBlog.image_url) {
         formData.append('image', currentBlog.image_url);
       }
 
@@ -79,11 +86,13 @@ const ManageBlogs = () => {
         const response = await apiClient.put(`/blogs/${currentBlog.id}`, formData);
         if (response.data.success) {
           setBlogs(blogs.map(b => b.id === currentBlog.id ? response.data.data : b));
+          alert(`✅ Blog saved! Live at: /blog/${response.data.data.slug}`);
         }
       } else {
         const response = await apiClient.post('/blogs', formData);
         if (response.data.success) {
           setBlogs([response.data.data, ...blogs]);
+          alert(`✅ Blog created! Live at: /blog/${response.data.data.slug}`);
         }
       }
       setIsEditing(false);
