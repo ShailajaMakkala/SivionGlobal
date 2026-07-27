@@ -249,7 +249,21 @@ const ManageBlogs = () => {
                       </td>
                       <td className="p-4">
                         <p className="text-sm font-bold text-white mb-0.5">{blog.title}</p>
-                        <p className="text-xs text-sky-400 font-mono">/{blog.slug}</p>
+                        {blog.slug ? (
+                          <a
+                            href={`/blog/${blog.slug}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-xs text-sky-400 font-mono hover:text-sky-200 hover:underline"
+                            title="Click to open in new tab"
+                          >
+                            🔗 /blog/{blog.slug}
+                          </a>
+                        ) : (
+                          <span className="text-xs text-red-400 font-mono bg-red-500/10 px-2 py-0.5 rounded">
+                            ⚠️ NO SLUG — Edit &amp; Save to fix
+                          </span>
+                        )}
                       </td>
                       <td className="p-4 text-sm text-slate-400">
                         {new Date(blog.created_at).toLocaleDateString()}
