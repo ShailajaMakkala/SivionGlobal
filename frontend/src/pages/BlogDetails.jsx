@@ -5,25 +5,28 @@ import apiClient from '../api/apiClient';
 import { getImageUrl } from '../utils/getImageUrl';
 
 const BlogDetails = () => {
-  const { slug } = useParams();
+  const { slug: rawSlug } = useParams();
+  // Decode URL encoding (e.g. %20 → space) then normalize to match DB
+  const slug = decodeURIComponent(rawSlug || '');
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const response = await apiClient.get(`/blogs/${slug}`);
+        const response = await apiClient.get(`/blogs/${encodeURIComponent(slug)}`);
         if (response.data?.data) {
           setBlog(response.data.data);
         }
       } catch (error) {
-        console.error('Failed to fetch blog');
+        console.error('Failed to fetch blog:', slug);
       } finally {
         setLoading(false);
       }
     };
-    fetchBlog();
+    if (slug) fetchBlog();
   }, [slug]);
+
 
   const formatDate = (dateString) => {
     if (!dateString) return '';

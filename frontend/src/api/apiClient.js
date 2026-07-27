@@ -26,4 +26,26 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+// Response interceptor to handle expired/invalid tokens
+apiClient.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      const errorMsg = error.response?.data?.error || '';
+      // If token expired or invalid, clear session and redirect to login
+      if (
+        errorMsg.includes('expired') ||
+        errorMsg.includes('not valid') ||
+        errorMsg.includes('No token')
+      ) {
+        localStorage.removeItem('sivion_admin_token');
+        localStorage.removeItem('sivion_admin_user');
+        // Redirect to login page
+        window.location.href = '/admin/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export default apiClient;

@@ -2,6 +2,18 @@ const Blog = require('../models/blogModel');
 const path = require('path');
 const { uploadFileToCloudinary } = require('../config/cloudinary');
 
+// Normalize slug: lowercase, replace spaces & special chars with hyphens
+const normalizeSlug = (slug) => {
+  if (!slug) return '';
+  return slug
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')   // remove special chars
+    .replace(/[\s_]+/g, '-')          // spaces/underscores → hyphens
+    .replace(/-+/g, '-')              // collapse multiple hyphens
+    .replace(/^-+|-+$/g, '');         // trim leading/trailing hyphens
+};
+
 const toRelativeUploadPath = (filePath) => {
   const uploadsDir = path.join(__dirname, '..', '..', 'frontend', 'public');
   const relative = path.relative(uploadsDir, filePath).replace(/\\/g, '/');
@@ -31,7 +43,7 @@ exports.getBlogBySlug = async (req, res) => {
 exports.createBlog = async (req, res) => {
   try {
     const { title, content, category, focus_keywords, meta_description } = req.body;
-    let slug = (req.body.slug || '').trim().replace(/^\/+/, '');
+    let slug = normalizeSlug(req.body.slug || title || '');
     let image = req.body.image;
     let file_type = undefined;
 
@@ -63,7 +75,7 @@ exports.createBlog = async (req, res) => {
 exports.updateBlog = async (req, res) => {
   try {
     const { title, content, category, focus_keywords, meta_description } = req.body;
-    let slug = (req.body.slug || '').trim().replace(/^\/+/, '');
+    let slug = normalizeSlug(req.body.slug || title || '');
     let image = req.body.image;
 
     if (req.files) {

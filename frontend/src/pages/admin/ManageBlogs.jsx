@@ -2,6 +2,18 @@ import React, { useState, useEffect } from 'react';
 import apiClient from '../../api/apiClient';
 import { FileText, Trash2, Edit, Plus, Search, Loader2 } from 'lucide-react';
 
+// Must match backend normalizeSlug
+const normalizeSlug = (text) => {
+  if (!text) return '';
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[\s_]+/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-+|-+$/g, '');
+};
+
 const ManageBlogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -134,11 +146,38 @@ const ManageBlogs = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Title</label>
-                <input required type="text" value={currentBlog.title} onChange={e => setCurrentBlog({ ...currentBlog, title: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500" />
+                <input
+                  required
+                  type="text"
+                  value={currentBlog.title}
+                  onChange={e => {
+                    const newTitle = e.target.value;
+                    // Auto-generate slug from title only when creating a new post
+                    if (!currentBlog.id) {
+                      setCurrentBlog({ ...currentBlog, title: newTitle, slug: normalizeSlug(newTitle) });
+                    } else {
+                      setCurrentBlog({ ...currentBlog, title: newTitle });
+                    }
+                  }}
+                  className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500"
+                />
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Slug (URL Path)</label>
-                <input required type="text" value={currentBlog.slug} onChange={e => setCurrentBlog({ ...currentBlog, slug: e.target.value })} className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm" placeholder="e.g. new-tech-trends" />
+                <input
+                  required
+                  type="text"
+                  value={currentBlog.slug}
+                  onChange={e => setCurrentBlog({ ...currentBlog, slug: e.target.value })}
+                  onBlur={e => setCurrentBlog({ ...currentBlog, slug: normalizeSlug(e.target.value) })}
+                  className="w-full bg-[#0A192F] border border-white/10 rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-sky-500 font-mono text-sm"
+                  placeholder="e.g. new-tech-trends"
+                />
+                {currentBlog.slug && (
+                  <p className="text-xs text-emerald-400 mt-1 font-mono">
+                    🔗 URL: /blog/<strong>{normalizeSlug(currentBlog.slug)}</strong>
+                  </p>
+                )}
               </div>
               <div>
                 <label className="block text-sm font-medium text-slate-300 mb-2">Cover Image URL (Full Article)</label>

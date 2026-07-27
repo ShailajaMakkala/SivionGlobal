@@ -19,7 +19,8 @@ class Blog {
   }
 
   static async getBySlug(slug) {
-    const query = `SELECT * FROM blogs WHERE slug = $1;`;
+    // Case-insensitive lookup to handle any casing mismatches in existing data
+    const query = `SELECT * FROM blogs WHERE LOWER(slug) = LOWER($1);`;
     const { rows } = await db.query(query, [slug]);
     return rows[0];
   }
