@@ -337,6 +337,7 @@ const ApplicationsTab = () => {
                         value={app.status || 'pending'}
                         onChange={(e) => handleStatusUpdate(app.id, e.target.value)}
                         className={`px-3 py-1 rounded-full text-xs font-bold border capitalize outline-none cursor-pointer transition-colors ${getStatusBadge(app.status)}`}
+                      >
                         <option value="pending" className="bg-[#112240] text-amber-400 font-bold">Pending</option>
                         <option value="selected" className="bg-[#112240] text-emerald-300 font-bold">Selected</option>
                         <option value="rejected" className="bg-[#112240] text-red-400 font-bold">Rejected</option>
