@@ -220,7 +220,7 @@ const ApplicationsTab = () => {
     const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID || 'service_ky7y4s1';
 
     const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY || 'UPrq9FZhLjorG2Yse';
-    
+
     // Debugging available in browser console: type _EMAILJS_CONFIG 
     window._EMAILJS_CONFIG = { serviceId, publicKey };
 
@@ -240,11 +240,11 @@ const ApplicationsTab = () => {
       location: 'Remote/India', // Example location
       title: app.position, // used in some subjects
       name: 'SiviOn Global Technologies', // from_name
-      
+
       // Fallbacks just in case
       to_name: app.name,
       to_email: app.email,
-      
+
       status: status === 'selected' ? 'Selected' : 'Rejected',
       message: status === 'selected'
         ? 'Congratulations! You have been selected for the position. We will get in touch with you soon.'
@@ -337,7 +337,6 @@ const ApplicationsTab = () => {
                         value={app.status || 'pending'}
                         onChange={(e) => handleStatusUpdate(app.id, e.target.value)}
                         className={`px-3 py-1 rounded-full text-xs font-bold border capitalize outline-none cursor-pointer transition-colors ${getStatusBadge(app.status)}`}
-                      >
                         <option value="pending" className="bg-[#112240] text-amber-400 font-bold">Pending</option>
                         <option value="selected" className="bg-[#112240] text-emerald-300 font-bold">Selected</option>
                         <option value="rejected" className="bg-[#112240] text-red-400 font-bold">Rejected</option>
@@ -345,24 +344,25 @@ const ApplicationsTab = () => {
                       </select>
                     </td>
                     <td className="p-4 text-center">
-                      {app.resume_url && !app.resume_url.startsWith('uploaded:') ? (
+                      {app.resume_url ? (
                         <a
-                          href={app.resume_url}
-                          download={`${app.name.replace(/\s+/g, '_')}_resume.pdf`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 rounded-lg transition-colors border border-blue-500/30 text-xs font-semibold"
+                          href={app.resume_url.startsWith('uploaded:') ? '#' : app.resume_url}
+                          download={!app.resume_url.startsWith('uploaded:') ? `${app.name.replace(/\s+/g, '_')}_resume.pdf` : undefined}
+                          target={!app.resume_url.startsWith('uploaded:') ? "_blank" : undefined}
+                          rel={!app.resume_url.startsWith('uploaded:') ? "noopener noreferrer" : undefined}
+                          onClick={(e) => {
+                            if (app.resume_url.startsWith('uploaded:')) {
+                              e.preventDefault();
+                              alert(`This is an older application. The resume file (${app.resume_url.replace('uploaded:', '')}) was not saved to cloud storage and cannot be downloaded.`);
+                            }
+                          }}
+                          className="inline-flex items-center justify-center p-2.5 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 rounded-xl transition-colors border border-blue-500/30"
+                          title={app.resume_url.startsWith('uploaded:') ? `Old file: ${app.resume_url.replace('uploaded:', '')} (Cannot download)` : "Download Resume"}
                         >
                           <FileDown className="w-4 h-4" />
-                          Download
                         </a>
-                      ) : app.resume_url?.startsWith('uploaded:') ? (
-                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/10 text-blue-400/70 rounded-lg border border-blue-500/20 text-xs font-medium cursor-not-allowed" title="Old applications cannot be downloaded">
-                          <FileDown className="w-3.5 h-3.5" />
-                          {app.resume_url.replace('uploaded:', '')}
-                        </span>
                       ) : (
-                        <span className="text-xs text-slate-500 italic">No resume</span>
+                        <span className="text-xs text-slate-500 italic">—</span>
                       )}
                     </td>
                     <td className="p-4 text-right">
@@ -404,8 +404,8 @@ const ManageCareers = () => {
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-2 px-5 py-3 font-semibold text-sm transition-all rounded-t-xl border-b-2 ${activeTab === tab.id
-                ? 'border-sky-400 text-sky-400 bg-sky-400/5'
-                : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
+              ? 'border-sky-400 text-sky-400 bg-sky-400/5'
+              : 'border-transparent text-slate-400 hover:text-white hover:bg-white/5'
               }`}
           >
             {tab.icon}
@@ -420,4 +420,4 @@ const ManageCareers = () => {
   );
 };
 
-export default ManageCareers;
+export default ManageCareers;
