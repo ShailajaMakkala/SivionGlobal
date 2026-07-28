@@ -1,16 +1,30 @@
 const Career = require('../models/careerModel');
+const { uploadBufferToCloudinary } = require('../config/cloudinary');
 
 exports.submitApplication = async (req, res) => {
   try {
     const { name, email, phone, position } = req.body;
-    
+
     if (!name || !email || !position) {
       return res.status(400).json({ error: 'Missing required fields (name, email, position)' });
     }
 
-    // If a file was uploaded, store its original name as resume reference
-    // In production you'd upload to S3/Cloudinary; here we store the filename
-    const resume_url = req.file ? `uploaded:${req.file.originalname}` : null;
+    let resume_url = null;
+
+    // Upload resume PDF to Cloudinary if provided
+    if (req.file && req.file.buffer) {
+      try {
+        const safeName = name.replace(/[^a-z0-9]/gi, '_').toLowerCase();
+        const timestamp = Date.now();
+        const publicId = `resumes/${safeName}_${timestamp}`;
+        const result = await uploadBufferToCloudinary(req.file.buffer, publicId, 'raw');
+        resume_url = result.secure_url;
+      } catch (uploadErr) {
+        console.error('Resume upload to Cloudinary failed:', uploadErr);
+        // Store original filename as fallback so application still saves
+        resume_url = `uploaded:${req.file.originalname}`;
+      }
+    }
 
     const application = await Career.create({ name, email, phone, position, resume_url });
     res.status(201).json({ success: true, data: application, message: 'Application submitted successfully!' });

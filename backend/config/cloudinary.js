@@ -63,7 +63,40 @@ const uploadFileToCloudinary = (localFilePath, relativePath) => {
   });
 };
 
+/**
+ * Uploads a file buffer directly to Cloudinary (for memory-based multer uploads).
+ * Used for resumes uploaded as PDF buffers.
+ *
+ * @param {Buffer} buffer - The file buffer
+ * @param {string} publicId - The Cloudinary public_id (folder/filename without extension)
+ * @param {string} resourceType - 'raw' for PDFs/docs, 'image' for images
+ * @returns {Promise<object>} Cloudinary upload response
+ */
+const uploadBufferToCloudinary = (buffer, publicId, resourceType = 'raw') => {
+  return new Promise((resolve, reject) => {
+    if (!process.env.CLOUDINARY_CLOUD_NAME) {
+      return reject(new Error('Cloudinary is not configured.'));
+    }
+
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        public_id: publicId,
+        resource_type: resourceType,
+        overwrite: true,
+        invalidate: true,
+      },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result);
+      }
+    );
+
+    uploadStream.end(buffer);
+  });
+};
+
 module.exports = {
   cloudinary,
-  uploadFileToCloudinary
+  uploadFileToCloudinary,
+  uploadBufferToCloudinary,
 };

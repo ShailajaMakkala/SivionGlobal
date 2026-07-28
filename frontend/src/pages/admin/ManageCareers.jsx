@@ -345,12 +345,24 @@ const ApplicationsTab = () => {
                       </select>
                     </td>
                     <td className="p-4 text-center">
-                      {app.resume_url ? (
-                        <a href={app.resume_url} target="_blank" rel="noopener noreferrer"
-                          className="inline-flex items-center justify-center p-2 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 rounded-lg transition-colors border border-blue-500/30">
+                      {app.resume_url && !app.resume_url.startsWith('uploaded:') ? (
+                        <a
+                          href={app.resume_url}
+                          download={`${app.name.replace(/\s+/g, '_')}_resume.pdf`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 rounded-lg transition-colors border border-blue-500/30 text-xs font-semibold"
+                        >
                           <FileDown className="w-4 h-4" />
+                          Download
                         </a>
-                      ) : <span className="text-xs text-slate-500 italic">No URL</span>}
+                      ) : app.resume_url?.startsWith('uploaded:') ? (
+                        <span className="text-xs text-amber-400 italic">
+                          {app.resume_url.replace('uploaded:', '')}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-slate-500 italic">No resume</span>
+                      )}
                     </td>
                     <td className="p-4 text-right">
                       <button onClick={() => handleDelete(app.id)} className="p-2 text-slate-500 hover:bg-red-500/10 hover:text-red-400 rounded-lg transition-colors">
