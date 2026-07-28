@@ -40,7 +40,9 @@ const AdminLayout = () => {
       <aside className={`fixed md:static inset-y-0 left-0 w-64 bg-[#112240] border-r border-white/5 z-50 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}>
         <div className="h-20 flex items-center px-6 border-b border-white/5 justify-between">
           <Link to="/admin/dashboard" className="outline-none" onClick={() => setSidebarOpen(false)}>
-             <Logo className="h-8 max-w-[160px]" />
+            <div style={{ transform: 'scale(3)', transformOrigin: 'left center' }}>
+              <Logo className="h-8 max-w-[160px]" />
+            </div>
           </Link>
           <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSidebarOpen(false)}>
             <X size={24} />
