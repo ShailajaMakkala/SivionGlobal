@@ -357,7 +357,8 @@ const ApplicationsTab = () => {
                           Download
                         </a>
                       ) : app.resume_url?.startsWith('uploaded:') ? (
-                        <span className="text-xs text-amber-400 italic">
+                        <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/10 text-blue-400/70 rounded-lg border border-blue-500/20 text-xs font-medium cursor-not-allowed" title="Old applications cannot be downloaded">
+                          <FileDown className="w-3.5 h-3.5" />
                           {app.resume_url.replace('uploaded:', '')}
                         </span>
                       ) : (
