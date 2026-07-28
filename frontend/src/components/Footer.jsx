@@ -15,7 +15,9 @@ const Footer = () => {
 
           <div className="lg:pr-8">
             <Link to="/" className="inline-block mb-6 outline-none">
-              <Logo className="h-12 max-w-[220px]" />
+              <div style={{ transform: 'scale(3)', transformOrigin: 'left center' }}>
+                <Logo className="h-12 max-w-[220px]" />
+              </div>
             </Link>
             <p className="text-sm leading-relaxed mb-8 font-light text-slate-400">
               Architecting the future through precision engineering, cutting-edge technology, and data-driven digital strategies. Elevate your corporate presence today.
