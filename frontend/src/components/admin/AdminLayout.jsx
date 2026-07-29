@@ -41,7 +41,7 @@ const AdminLayout = () => {
         <div className="h-20 flex items-center px-6 border-b border-white/5 justify-between">
           <Link to="/admin/dashboard" className="outline-none" onClick={() => setSidebarOpen(false)}>
             <div style={{ transform: 'scale(3)', transformOrigin: 'left center' }}>
-              <Logo className="h-8 max-w-[160px]" />
+              <Logo className="h-10 max-w-[200px]" />
             </div>
           </Link>
           <button className="md:hidden text-slate-400 hover:text-white" onClick={() => setSidebarOpen(false)}>

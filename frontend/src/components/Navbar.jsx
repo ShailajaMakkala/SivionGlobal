@@ -32,7 +32,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
 
           {/* Logo */}
-          <Link to="/" className="flex-shrink-0 flex items-center outline-none">
+          <Link to="/" className="flex-shrink-0 flex items-center outline-none transform scale-[2.5] sm:scale-[3] origin-left ml-8">
             <Logo className="h-10 max-w-[200px]" />
           </Link>
 
