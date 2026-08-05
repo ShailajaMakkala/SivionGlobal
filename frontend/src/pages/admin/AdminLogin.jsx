@@ -20,7 +20,7 @@ const AdminLogin = () => {
       if (response.data.success) {
         localStorage.setItem('sivion_admin_token', response.data.token);
         localStorage.setItem('sivion_admin_user', JSON.stringify(response.data.admin));
-        navigate('/admin/dashboard');
+        navigate('/admin');
       }
     } catch (err) {
       setError(err.response?.data?.error || 'Login failed. Please check credentials.');

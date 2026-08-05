@@ -71,7 +71,7 @@ function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<ProtectedRoute />}>
             <Route element={<AdminLayout />}>
-              <Route path="dashboard" element={<Dashboard />} />
+              <Route index element={<Dashboard />} />
               <Route path="blogs" element={<ManageBlogs />} />
               <Route path="portfolio" element={<ManagePortfolio />} />
               <Route path="careers" element={<ManageCareers />} />

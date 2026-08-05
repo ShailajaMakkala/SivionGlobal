@@ -5,12 +5,16 @@ const path = require('path');
 const careerController = require('../controllers/careerController');
 const authMiddleware = require('../middleware/authMiddleware');
 
-// Multer config: store in memory, accept only PDF
+// Multer config: store in memory, accept PDF and common MIME types
 const storage = multer.memoryStorage();
 const upload = multer({
   storage,
   fileFilter: (req, file, cb) => {
-    if (file.mimetype === 'application/pdf') {
+    // Accept application/pdf, octet-stream with .pdf extension, and binary data
+    const isPdf = file.mimetype === 'application/pdf' ||
+                  file.mimetype === 'application/octet-stream' ||
+                  file.originalname.toLowerCase().endsWith('.pdf');
+    if (isPdf) {
       cb(null, true);
     } else {
       cb(new Error('Only PDF files are allowed'), false);
@@ -21,7 +25,9 @@ const upload = multer({
 
 router.post('/apply', upload.single('resume'), careerController.submitApplication);
 
-// Admin routes (Protected)
+router.get('/:id/resume-pdf', careerController.viewResumePdf);
+router.get('/:id/resume/:filename', careerController.viewResume);
+router.get('/:id/resume', careerController.viewResume);
 router.get('/', authMiddleware, careerController.getApplications);
 router.delete('/:id', authMiddleware, careerController.deleteApplication);
 router.patch('/:id/status', authMiddleware, careerController.updateApplicationStatus);

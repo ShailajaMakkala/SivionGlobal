@@ -34,6 +34,12 @@ class Career {
     const { rows } = await db.query(query, [status, id]);
     return rows[0];
   }
+
+  static async getById(id) {
+    const query = `SELECT * FROM job_applications WHERE id = $1;`;
+    const { rows } = await db.query(query, [id]);
+    return rows[0];
+  }
 }
 
 module.exports = Career;

@@ -4,7 +4,7 @@ import emailjs from '@emailjs/browser';
 import apiClient from '../../api/apiClient';
 import {
   BriefcaseBusiness, Trash2, Search, FileDown, Loader2,
-  Plus, Edit, ToggleLeft, ToggleRight, Briefcase, Users
+  Plus, Edit, ToggleLeft, ToggleRight, Briefcase, Users, Eye, X, FileText
 } from 'lucide-react';
 
 const EMPTY_POSITION = { id: null, title: '', location: '', type: 'Full-time', department: '', description: '', requirements: '', is_active: true };
@@ -182,6 +182,9 @@ const ApplicationsTab = () => {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [viewingResume, setViewingResume] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
   const authHeaders = { headers: { Authorization: `Bearer ${localStorage.getItem('sivion_admin_token')}` } };
 
   useEffect(() => {
@@ -288,6 +291,13 @@ const ApplicationsTab = () => {
     app.position?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
+  const totalPages = Math.ceil(filtered.length / itemsPerPage);
+  const paginatedApps = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -308,7 +318,8 @@ const ApplicationsTab = () => {
             <p>No applications found.</p>
           </div>
         ) : (
-          <div className="overflow-x-auto">
+          <>
+            <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
               <thead>
                 <tr className="bg-[#112240] border-b border-white/10">
@@ -321,7 +332,7 @@ const ApplicationsTab = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-white/5">
-                {filtered.map(app => (
+                {paginatedApps.map(app => (
                   <tr key={app.id} className="hover:bg-white/5 transition-colors">
                     <td className="p-4 text-sm text-slate-400 whitespace-nowrap">{new Date(app.created_at).toLocaleDateString()}</td>
                     <td className="p-4">
@@ -345,23 +356,18 @@ const ApplicationsTab = () => {
                       </select>
                     </td>
                     <td className="p-4 text-center">
-                      {app.resume_url ? (
-                        <a
-                          href={app.resume_url.startsWith('uploaded:') ? '#' : app.resume_url}
-                          download={!app.resume_url.startsWith('uploaded:') ? `${app.name.replace(/\s+/g, '_')}_resume.pdf` : undefined}
-                          target={!app.resume_url.startsWith('uploaded:') ? "_blank" : undefined}
-                          rel={!app.resume_url.startsWith('uploaded:') ? "noopener noreferrer" : undefined}
-                          onClick={(e) => {
-                            if (app.resume_url.startsWith('uploaded:')) {
-                              e.preventDefault();
-                              alert(`This is an older application. The resume file (${app.resume_url.replace('uploaded:', '')}) was not saved to cloud storage and cannot be downloaded.`);
-                            }
+                      {app.resume_url && !app.resume_url.startsWith('uploaded:') && app.resume_url.trim() !== '' ? (
+                        <button
+                          onClick={() => {
+                            const baseUrl = apiClient.defaults.baseURL || '/api';
+                            const safeName = (app.name || 'Applicant').replace(/[^a-z0-9]/gi, '_');
+                            window.open(`${baseUrl}/careers/${app.id}/resume/${safeName}_Resume.pdf`, '_blank', 'noopener,noreferrer');
                           }}
-                          className="inline-flex items-center justify-center p-2.5 bg-blue-600/20 text-blue-400 hover:bg-blue-600/40 rounded-xl transition-colors border border-blue-500/30"
-                          title={app.resume_url.startsWith('uploaded:') ? `Old file: ${app.resume_url.replace('uploaded:', '')} (Cannot download)` : "Download Resume"}
+                          className="inline-flex items-center justify-center p-2.5 bg-sky-500/20 text-sky-400 hover:bg-sky-500/40 rounded-xl transition-colors border border-sky-500/30"
+                          title="View Resume"
                         >
-                          <FileDown className="w-4 h-4" />
-                        </a>
+                          <Eye className="w-4 h-4" />
+                        </button>
                       ) : (
                         <span className="text-xs text-slate-500 italic">—</span>
                       )}
@@ -376,8 +382,73 @@ const ApplicationsTab = () => {
               </tbody>
             </table>
           </div>
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between px-6 py-4 border-t border-white/10 bg-[#112240]/50">
+              <span className="text-sm text-slate-400">
+                Showing <span className="font-semibold text-white">{(currentPage - 1) * itemsPerPage + 1}</span> to <span className="font-semibold text-white">{Math.min(currentPage * itemsPerPage, filtered.length)}</span> of <span className="font-semibold text-white">{filtered.length}</span> entries
+              </span>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Previous
+                </button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-9 h-9 rounded-xl text-sm font-semibold transition-all ${
+                      currentPage === page
+                        ? 'bg-sky-500 text-white shadow-[0_0_10px_rgba(14,165,233,0.4)]'
+                        : 'bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                ))}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className="px-4 py-2 rounded-xl text-sm font-semibold bg-white/5 text-slate-300 hover:bg-white/10 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                >
+                  Next
+                </button>
+              </div>
+            </div>
+          )}
+          </>
         )}
       </div>
+
+      {/* Resume Viewer Modal */}
+      {viewingResume && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-[#112240] w-full max-w-5xl h-[85vh] rounded-2xl shadow-2xl flex flex-col border border-white/10 overflow-hidden relative">
+            <div className="flex justify-between items-center p-4 border-b border-white/10 bg-[#0A192F]">
+              <h3 className="text-lg font-bold text-white flex items-center gap-2">
+                <FileText className="w-5 h-5 text-sky-400" /> Resume Viewer
+              </h3>
+              <button 
+                onClick={() => setViewingResume(null)}
+                className="p-2 text-slate-400 hover:text-white hover:bg-white/10 rounded-lg transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="flex-1 w-full bg-white relative">
+              <iframe 
+                key={viewingResume}
+                src={`https://docs.google.com/viewer?url=${encodeURIComponent(viewingResume)}&embedded=true`}
+                className="w-full h-full border-none absolute inset-0"
+                title="Resume PDF"
+              />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -16,7 +16,7 @@ const AdminLayout = () => {
   };
 
   const menuItems = [
-    { title: 'Dashboard', path: '/admin/dashboard', icon: <LayoutDashboard size={20} /> },
+    { title: 'Dashboard', path: '/admin', icon: <LayoutDashboard size={20} /> },
     { title: 'Manage Blogs', path: '/admin/blogs', icon: <FileText size={20} /> },
     { title: 'Manage Portfolio', path: '/admin/portfolio', icon: <Briefcase size={20} /> },
     { title: 'Job Applications', path: '/admin/careers', icon: <BriefcaseBusiness size={20} /> },
@@ -39,7 +39,7 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className={`fixed md:static inset-y-0 left-0 w-64 bg-[#112240] border-r border-white/5 z-50 transform ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 transition-transform duration-300 ease-in-out flex flex-col`}>
         <div className="h-20 flex items-center px-6 border-b border-white/5 justify-between">
-          <Link to="/admin/dashboard" className="outline-none" onClick={() => setSidebarOpen(false)}>
+          <Link to="/admin" className="outline-none" onClick={() => setSidebarOpen(false)}>
             <div style={{ transform: 'scale(3)', transformOrigin: 'left center' }}>
               <Logo className="h-10 max-w-[200px]" />
             </div>
