@@ -13,7 +13,7 @@ exports.submitApplication = async (req, res) => {
       return res.status(400).json({ error: 'Missing required fields (name, email, position)' });
     }
 
-    let resume_url = null;
+    let resume_url = '';
 
     if (req.file && req.file.buffer) {
       try {
@@ -32,8 +32,7 @@ exports.submitApplication = async (req, res) => {
         console.log('✅ Cloudinary upload success:', resume_url);
       } catch (uploadErr) {
         console.error('❌ Cloudinary upload failed:', uploadErr.message || uploadErr);
-        // Do NOT use "uploaded:" fallback - just log and continue without URL
-        resume_url = null;
+        resume_url = '';
       }
     } else {
       console.log('No file in request - either not provided or multer rejected it');
